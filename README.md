@@ -20,41 +20,41 @@ On macos, after pulling the repository, follow these commands in order to get st
 
 Enter the correct repository :
 
-'''bash
+```bash
 cd Odacity-Gacha
-'''
+```
 
 Build the project using the following command :
 
-'''bash
+```bash
 dotnet build
-'''
+```
 
 Publish the project as a self-contained executable using the following command :
 
-'''bash
+```bash
 dotnet publish -c Release -r osx-x64 --self-contained true /p:PublishSingleFile=true
-'''
+```
 
 Navigate to the publish folder using the following command (replace 'net6.0' with your .Net version) :
 
-'''bash
+```bash
 cd bin/Release/net6.0/osx-x64/publish/
-'''
+```
 
 Move and navigate the executable to the correct emplacements :
 
-'''bash
+```bash
 #Move the executable
 mv Odacity ../../
 #Navigate
 cd ../../
-'''
+```
 
 Run the 'Odacity' executable using the following command :
 
-'''bash
+```bash
 ./Odacity
-'''
+```
 
 Congratulations, you are Done!
