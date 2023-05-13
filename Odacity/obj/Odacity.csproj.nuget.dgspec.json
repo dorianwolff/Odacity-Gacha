@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/le_ptit_cthulhu/Bureau_perso/Odacity/Odacity/Odacity.csproj": {}
+    "/Users/le_ptit_cthulhu/Bureau_perso/Odacity-Gacha/Odacity/Odacity.csproj": {}
   },
   "projects": {
-    "/Users/le_ptit_cthulhu/Bureau_perso/Odacity/Odacity/Odacity.csproj": {
+    "/Users/le_ptit_cthulhu/Bureau_perso/Odacity-Gacha/Odacity/Odacity.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/le_ptit_cthulhu/Bureau_perso/Odacity/Odacity/Odacity.csproj",
+        "projectUniqueName": "/Users/le_ptit_cthulhu/Bureau_perso/Odacity-Gacha/Odacity/Odacity.csproj",
         "projectName": "Odacity",
-        "projectPath": "/Users/le_ptit_cthulhu/Bureau_perso/Odacity/Odacity/Odacity.csproj",
+        "projectPath": "/Users/le_ptit_cthulhu/Bureau_perso/Odacity-Gacha/Odacity/Odacity.csproj",
         "packagesPath": "/Users/le_ptit_cthulhu/.nuget/packages/",
-        "outputPath": "/Users/le_ptit_cthulhu/Bureau_perso/Odacity/Odacity/obj/",
+        "outputPath": "/Users/le_ptit_cthulhu/Bureau_perso/Odacity-Gacha/Odacity/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/le_ptit_cthulhu/.nuget/NuGet/NuGet.Config"
@@ -67,7 +67,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/Users/le_ptit_cthulhu/.dotnet/sdk/6.0.400/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.408/RuntimeIdentifierGraph.json"
         }
       }
     }
