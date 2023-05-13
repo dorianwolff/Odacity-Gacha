@@ -6,8 +6,8 @@ Odacity is a script-only gacha game. You will be able to collect, play and enhan
 
 * ('any character') means you should press 'any chanracter' to access the function
 * When in doubt press 'enter'
-* Displaying character images do not work yet in the terminal. Maybe downloading specific packages might solve this
-* Keep in mind as long as this comment is here, the project is not completed !
+* Displaying character images does not work yet in the terminal. Maybe downloading specific packages might solve this.
+* Keep in mind as long as this comment is here, the project is not completed ! :)
 * Have fun !
 
 ## Prerequisits
