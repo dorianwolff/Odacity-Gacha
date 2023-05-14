@@ -39,7 +39,7 @@ dotnet publish -c Release -r osx-x64 --self-contained true /p:PublishSingleFile=
 Navigate to the publish folder using the following command (replace 'net6.0' with your .Net version) :
 
 ```bash
-cd bin/Release/net6.0/osx-x64/publish/
+cd Odacity/bin/Release/net6.0/osx-x64/publish/
 ```
 
 Move and navigate the executable to the correct emplacements :
