@@ -90,7 +90,7 @@ public class Combat
             else
             {
                 enemy.TurnPriority = 0;
-                EnemyTurn(enemy);
+                DisplayEnemyTurn(enemy, characterCollection);
             }
             TurnCount+=1;
             UpdateTurnPriority();
@@ -172,14 +172,13 @@ public class Combat
     }
 
 
-    public static void EnemyTurn(Enemies enemy)
+    public static void DisplayEnemyTurn(Enemies enemy,List<Character> characterCollection)
     {
-        
+        Console.Clear();
     }
 
     public static void DisplayCharacterTurn(Character character,List<Character> characterCollection)
     {
-
         Console.Clear();
         string isActive1 = "\u001b[0m";
         string isActive2 = "\u001b[0m";
@@ -366,16 +365,43 @@ public class Combat
                 }
                 break;
             case ConsoleKey.Q:
-                AttackEnemy(Enemies.towerEnemies[Arrow-1],character,1, characterCollection);
-                StartFight(characterCollection);
+                if (character.Skill1.CooldownLeft == 0)
+                {
+                    DoesCharacterCooldown();
+                    character.Skill1.CooldownLeft = character.Skill1.Cooldown;
+                    AttackEnemy(Enemies.towerEnemies[Arrow-1],character,1, characterCollection);
+                    StartFight(characterCollection);
+                }
+                else
+                {
+                    DisplayCharacterTurn(character, characterCollection);
+                }
                 break;
             case ConsoleKey.W:
-                AttackEnemy(Enemies.towerEnemies[Arrow-1],character,2, characterCollection);
-                StartFight(characterCollection);
+                if (character.Skill2.CooldownLeft == 0)
+                {
+                    DoesCharacterCooldown();
+                    character.Skill2.CooldownLeft = character.Skill2.Cooldown;
+                    AttackEnemy(Enemies.towerEnemies[Arrow-1],character,2, characterCollection);
+                    StartFight(characterCollection);
+                }
+                else
+                {
+                    DisplayCharacterTurn(character, characterCollection);
+                }
                 break;
             case ConsoleKey.R:
-                AttackEnemy(Enemies.towerEnemies[Arrow-1],character,3, characterCollection);
-                StartFight(characterCollection);
+                if (character.UltSkill.CooldownLeft == 0)
+                {
+                    DoesCharacterCooldown();
+                    character.UltSkill.CooldownLeft = character.UltSkill.Cooldown;
+                    AttackEnemy(Enemies.towerEnemies[Arrow-1],character,3, characterCollection);
+                    StartFight(characterCollection);
+                }
+                else
+                {
+                    DisplayCharacterTurn(character, characterCollection);
+                }
                 break;
             case ConsoleKey.DownArrow:
                 if (Arrow == 4)
@@ -418,6 +444,19 @@ public class Combat
                 break;
         }
         
+    }
+
+    public static void DoesCharacterCooldown()
+    {
+        foreach (var character in Dungeon.Team)
+        {
+            if (character.Skill1.CooldownLeft > 0)
+                character.Skill1.CooldownLeft -= 1;
+            if (character.Skill2.CooldownLeft > 0)
+                character.Skill2.CooldownLeft -= 1;
+            if (character.UltSkill.CooldownLeft > 0)
+                character.UltSkill.CooldownLeft -= 1;
+        }
     }
 
     public static void AttackEnemy(Enemies enemies, Character character, int skill, List<Character> characterCollection)
