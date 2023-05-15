@@ -45,6 +45,7 @@ public class GenerateCharacters
     public static Skill GenerateCharacterUltSkill(string grade) //needs color
     {
         Skill ult = new Skill();
+        ult.Cooldown = 3;
         ult.isAoeBuff = false;
         ult.BuffEffect = "";
         ult.DebuffEffect = "";
@@ -182,6 +183,7 @@ public class GenerateCharacters
     public static Skill GenerateCharacterNormalSkill(string grade) //needs color
     {
         Skill normal = new Skill();
+        normal.Cooldown = 0;
         normal.isAoeBuff = false;
         normal.BuffEffect = "";
         normal.DebuffEffect = "";
@@ -321,6 +323,7 @@ public class GenerateCharacters
     public static Skill GenerateEnemyUltSkill(string grade) //needs color
     {
         Skill ult = new Skill();
+        ult.Cooldown = 3;
         ult.isAoeBuff = false;
         ult.BuffEffect = "";
         ult.DebuffEffect = "";
@@ -458,6 +461,7 @@ public class GenerateCharacters
     public static Skill GenerateEnemyNormalSkill(string grade) //needs color
     {
         Skill normal = new Skill();
+        normal.Cooldown = 0;
         normal.isAoeBuff = false;
         normal.BuffEffect = "";
         normal.DebuffEffect = "";

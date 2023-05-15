@@ -12,6 +12,10 @@ public class Skill
     public bool isAoeBuff { get; set; }
     public string DebuffEffect { get; set; } //stun, poison
     public bool isSingleTarget { get; set; }
+    
+    public int Cooldown { get; set; }
+    
+    public int CooldownLeft { get; set; }
 }
 
 

@@ -19,6 +19,9 @@ public class Combat
             character.buffedDodge = character.buffedDodge;
             character.buffedAccuracy = character.Accuracy;
             character.IsBuffed = false;
+            character.Skill1.CooldownLeft = 0;
+            character.Skill2.CooldownLeft = 0;
+            character.UltSkill.CooldownLeft = character.UltSkill.Cooldown;
         }
         
 
@@ -36,6 +39,8 @@ public class Combat
             enemy.buffedDodge = enemy.buffedDodge;
             enemy.buffedAccuracy = enemy.Accuracy;
             enemy.IsBuffed = false;
+            enemy.Skill1.CooldownLeft = 0;
+            enemy.UltSkill.CooldownLeft = enemy.UltSkill.Cooldown;
         }
 
         displayChars = true;
@@ -47,36 +52,25 @@ public class Combat
 
     public static void StartFight(List<Character> characterCollection)
     {
-        bool allDead = ADeadTeam();
-        if (!allDead)
+        Character character = FastestCharacter();
+        Enemies enemy = FastestEnemy();
+        if (character.TurnPriority >= enemy.TurnPriority)
         {
-            Character character = FastestCharacter();
-            Enemies enemy = FastestEnemy();
-            if (character.TurnPriority >= enemy.TurnPriority)
-            {
-                character.TurnPriority = 0;
-                DisplayCharacterTurn(character,characterCollection);
-            }
-            else
-            {
-                enemy.TurnPriority = 0;
-                EnemyTurn(enemy);
-            }
-            TurnCount+=1;
-            UpdateTurnPriority();
-            StartFight(characterCollection);
+            character.TurnPriority = 0;
+            DisplayCharacterTurn(character,characterCollection);
         }
         else
         {
-            Dungeon.towerStageClear -=1;
-            Console.ReadKey();
-            Console.Clear();
-            Dungeon.DisplayHighScores(characterCollection);
+            enemy.TurnPriority = 0;
+            EnemyTurn(enemy);
         }
+        TurnCount+=1;
+        UpdateTurnPriority();
+        StartFight(characterCollection);
 
     }
 
-    public static bool ADeadTeam()
+    public static bool ADeadTeam(List<Character> characterCollection)
     {
         bool dedTeam = true;
         foreach (Character character in Dungeon.Team)
@@ -87,18 +81,7 @@ public class Combat
 
         if (dedTeam)
         {
-            Console.Clear();
-            Console.WriteLine("/-------------------------------------------\\\n" +
-                              "|                                           |\n" +
-                              "|                                           |\n" +
-                              "|                                           |\n" +
-                              "|                 \u001b[31mAnnihilated\u001b[0m               |\n" +
-                              "|                                           |\n" +
-                              "|                                           |\n" +
-                              "|                                           |\n" +
-                              "|                                           |\n" +
-                              "\\-------------------------------------------/\n");
-            Console.WriteLine("\u001b[31mYou\u001b[0m have been defeated!!!");
+            Defeat();
             return dedTeam;
         }
 
@@ -112,24 +95,50 @@ public class Combat
         
         if (dedEnemies)
         {
-            Console.Clear();
-            Console.WriteLine("/-------------------------------------------\\\n" +
-                              "|                                           |\n" +
-                              "|                                           |\n" +
-                              "|                                           |\n" +
-                              "|                   \u001b[33mVictory!\u001b[0m                |\n" +
-                              "|                                           |\n" +
-                              "|                                           |\n" +
-                              "|                                           |\n" +
-                              "|                                           |\n" +
-                              "\\-------------------------------------------/\n");
-            Console.WriteLine("All \u001b[31menemies\u001b[0m have been defeated!!!");
-            Dungeon.towerStageClear += 1;
+            Vicory(characterCollection);
             return dedEnemies;
         }
         return false;
     }
-    
+
+    public static void Vicory(List<Character> characterCollection)
+    {
+        Console.WriteLine("All \u001b[31menemies\u001b[0m have been defeated!");
+        Console.ReadKey();
+        Console.Clear();
+        Console.WriteLine("/-------------------------------------------\\\n" +
+                          "|                                           |\n" +
+                          "|                                           |\n" +
+                          "|                                           |\n" +
+                          "|                   \u001b[33mVictory!\u001b[0m                |\n" +
+                          "|                                           |\n" +
+                          "|                                           |\n" +
+                          "|                                           |\n" +
+                          "|                                           |\n" +
+                          "\\-------------------------------------------/\n");
+        Dungeon.towerStageClear += 1;
+        Console.ReadKey();
+        Console.Clear();
+        Dungeon.DisplayHighScores(characterCollection);
+    }
+
+    public static void Defeat()
+    {
+        Console.WriteLine("\u001b[31mYou\u001b[0m have been defeated!");
+        Console.ReadKey();
+        Console.Clear();
+        Console.WriteLine("/-------------------------------------------\\\n" +
+                          "|                                           |\n" +
+                          "|                                           |\n" +
+                          "|                                           |\n" +
+                          "|                 \u001b[31mAnnihilated\u001b[0m               |\n" +
+                          "|                                           |\n" +
+                          "|                                           |\n" +
+                          "|                                           |\n" +
+                          "|                                           |\n" +
+                          "\\-------------------------------------------/\n");
+    }
+
 
     public static void EnemyTurn(Enemies enemy)
     {
@@ -147,8 +156,8 @@ public class Combat
                 enemy.IsAlive = false;
             }
         }
-        if (ADeadTeam())
-            StartFight(characterCollection);
+        if (ADeadTeam(characterCollection))
+            return;
 
         Console.Clear();
         string isActive1 = "\u001b[0m";
@@ -399,7 +408,6 @@ public class Combat
         int accuracyLuck = rdv.Next(1, 11);
         dodgeLuck += enemies.buffedDodge;
         accuracyLuck += character.buffedAccuracy;
-        Console.WriteLine("accuracy : "+accuracyLuck+" dodge : "+dodgeLuck);
         bool dodged = false;
         if (character.IsStuned)
         {
@@ -409,7 +417,6 @@ public class Combat
         } //Check Stuned
         if (dodgeLuck>accuracyLuck)
         {
-            dodged = true;
             Console.WriteLine("The enemy \u001b[31mdodged\u001b[0m!");
             Console.ReadKey();
         }
@@ -923,9 +930,13 @@ public class Combat
                     res += " ";
                     len += 1;
                 }
-                res += "[Q]";
 
-                len += 3;
+                if (character.Skill1.CooldownLeft == 0)
+                {
+                    res += "[Q]";
+
+                    len += 3;
+                }
             }
             while (len < 71)
             {
@@ -979,9 +990,13 @@ public class Combat
                     res += " ";
                     len += 1;
                 }
-                res += "[W]";
 
-                len += 3;
+                if (character.Skill2.CooldownLeft == 0)
+                {
+                    res += "[W]";
+
+                    len += 3;
+                }
             }
             while (len < 71)
             {
@@ -1035,9 +1050,12 @@ public class Combat
                     res += " ";
                     len += 1;
                 }
-                res += "[R]";
+                if (character.UltSkill.CooldownLeft==0)
+                {
+                    res += "[R]";
 
-                len += 3;
+                    len += 3;
+                }
             }
             while (len < 71)
             {
