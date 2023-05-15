@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b8825d56-6961-4a9f-a7f3-a825ccbff896" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.Odacity/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Odacity/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Odacity/Accounts/Raven.dat" beforeDir="false" afterPath="$PROJECT_DIR$/Odacity/Accounts/Raven.dat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Odacity/Combat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Odacity/Combat.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Odacity/Dungeon.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Odacity/Dungeon.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Odacity/Menu.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Odacity/Menu.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Odacity/bin/Debug/net6.0/Odacity.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Odacity/bin/Debug/net6.0/Odacity.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Odacity/bin/Debug/net6.0/Odacity.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Odacity/bin/Debug/net6.0/Odacity.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Odacity/obj/Debug/net6.0/Odacity.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Odacity/obj/Debug/net6.0/Odacity.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Odacity/obj/Debug/net6.0/Odacity.pdb" beforeDir="false" afterPath="$PROJECT_DIR$/Odacity/obj/Debug/net6.0/Odacity.pdb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Odacity/obj/Debug/net6.0/ref/Odacity.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Odacity/obj/Debug/net6.0/ref/Odacity.dll" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Odacity/obj/Debug/net6.0/refint/Odacity.dll" beforeDir="false" afterPath="$PROJECT_DIR$/Odacity/obj/Debug/net6.0/refint/Odacity.dll" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,7 +59,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1684010384431</updated>
-      <workItem from="1684010395582" duration="9082000" />
+      <workItem from="1684010395582" duration="9568000" />
     </task>
     <servers />
   </component>

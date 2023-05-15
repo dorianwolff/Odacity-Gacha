@@ -48,6 +48,21 @@ public class Combat
         TurnCount = 0;
         
         StartFight(characterCollection);
+        bool dedEnemies = true;
+        foreach (Enemies enemy in Enemies.towerEnemies)
+        {
+            if (enemy.IsAlive)
+                dedEnemies = false;
+        }
+
+        if (dedEnemies)
+        {
+            Victory(characterCollection);
+        }
+        else
+        {
+            Defeat(characterCollection);
+        }
 
     }
 
@@ -97,7 +112,6 @@ public class Combat
 
         if (dedTeam)
         {
-            Defeat(characterCollection);
             return dedTeam;
         }
 
@@ -111,7 +125,6 @@ public class Combat
         
         if (dedEnemies)
         {
-            Victory(characterCollection);
             return dedEnemies;
         }
         return false;
