@@ -68,8 +68,7 @@ public class Menu
                 break;
             case ConsoleKey.E:
                 Console.Clear();
-                //Here to show game stats if needed
-                break;
+                return;
             case ConsoleKey.C:
                 // Go to Collection
                 Console.Clear();

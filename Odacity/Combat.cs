@@ -46,6 +46,7 @@ public class Combat
         displayChars = true;
         Arrow = 1;
         TurnCount = 0;
+        
         StartFight(characterCollection);
 
     }
@@ -54,25 +55,40 @@ public class Combat
     {
         Character character = FastestCharacter();
         Enemies enemy = FastestEnemy();
-        if (character.TurnPriority >= enemy.TurnPriority)
+        foreach (Enemies enemys in Enemies.towerEnemies)
         {
-            character.TurnPriority = 0;
-            DisplayCharacterTurn(character,characterCollection);
+            if (enemys.HP <= 0)
+            {
+                enemys.HP = 0;
+                enemys.IsAlive = false;
+            }
         }
-        else
+
+        bool dedTeam = ADeadTeam(characterCollection);
+        if (!dedTeam)
         {
-            enemy.TurnPriority = 0;
-            EnemyTurn(enemy);
+            if (character.TurnPriority >= enemy.TurnPriority)
+            {
+                character.TurnPriority = 0;
+                DisplayCharacterTurn(character,characterCollection);
+            }
+            else
+            {
+                enemy.TurnPriority = 0;
+                EnemyTurn(enemy);
+            }
+            TurnCount+=1;
+            UpdateTurnPriority();
+            StartFight(characterCollection);
         }
-        TurnCount+=1;
-        UpdateTurnPriority();
-        StartFight(characterCollection);
+        
 
     }
 
     public static bool ADeadTeam(List<Character> characterCollection)
     {
         bool dedTeam = true;
+        
         foreach (Character character in Dungeon.Team)
         {
             if (character.IsAlive)
@@ -81,7 +97,7 @@ public class Combat
 
         if (dedTeam)
         {
-            Defeat();
+            Defeat(characterCollection);
             return dedTeam;
         }
 
@@ -95,13 +111,13 @@ public class Combat
         
         if (dedEnemies)
         {
-            Vicory(characterCollection);
+            Victory(characterCollection);
             return dedEnemies;
         }
         return false;
     }
 
-    public static void Vicory(List<Character> characterCollection)
+    public static void Victory(List<Character> characterCollection)
     {
         Console.WriteLine("All \u001b[31menemies\u001b[0m have been defeated!");
         Console.ReadKey();
@@ -122,7 +138,7 @@ public class Combat
         Dungeon.DisplayHighScores(characterCollection);
     }
 
-    public static void Defeat()
+    public static void Defeat(List<Character> characterCollection)
     {
         Console.WriteLine("\u001b[31mYou\u001b[0m have been defeated!");
         Console.ReadKey();
@@ -137,6 +153,9 @@ public class Combat
                           "|                                           |\n" +
                           "|                                           |\n" +
                           "\\-------------------------------------------/\n");
+        Console.ReadKey();
+        Console.Clear();
+        Dungeon.EnterDungeon(characterCollection);
     }
 
 
@@ -147,17 +166,6 @@ public class Combat
 
     public static void DisplayCharacterTurn(Character character,List<Character> characterCollection)
     {
-        
-        foreach (Enemies enemy in Enemies.towerEnemies)
-        {
-            if (enemy.HP <= 0)
-            {
-                enemy.HP = 0;
-                enemy.IsAlive = false;
-            }
-        }
-        if (ADeadTeam(characterCollection))
-            return;
 
         Console.Clear();
         string isActive1 = "\u001b[0m";

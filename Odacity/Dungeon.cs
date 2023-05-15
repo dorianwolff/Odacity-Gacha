@@ -85,7 +85,7 @@ public class Dungeon
         Enter(characterCollection);
     } //TODO
 
-    private static void EnterDungeon(List<Character> characterCollection)
+    public static void EnterDungeon(List<Character> characterCollection)
     {
         Console.WriteLine("     You have ventured into a Dungeon...\n"+ 
                           "/-------------------------------------------\\\n" +
