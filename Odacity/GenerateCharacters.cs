@@ -54,7 +54,7 @@ public class GenerateCharacters
         {
             "Oblivion", "Chaos", "Beginning of the end", "BONK!", "Begone", "Absolute order", "Get REKT",
             "Me>>You", "Shrekt", "Get dunked", "Purgatory", "Divinity's embrace", "Mortal slumber",
-            "Thanks and bye", "Skill issue", "Muscle power"
+            "Thanks & bye", "Skill issue", "Muscle power"
             
         };
         string ultname = Ultname[new Random().Next(Ultname.Length)];
@@ -304,7 +304,7 @@ public class GenerateCharacters
             if (debuffType == 1)
             {
                 debuffT = "stun";
-                normal.isSingleTarget = false;
+                normal.isSingleTarget = true;
                 dmg /= 2;
             }
             normal.AttackMultiplier = dmg;

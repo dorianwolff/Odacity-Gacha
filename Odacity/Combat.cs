@@ -87,19 +87,16 @@ public class Combat
             }
         }
 
-        bool dedTeam = ADeadTeam(characterCollection);
-        if (!dedTeam)
+        bool dedTeam = ADeadTeam();
+        if (character.TurnPriority >= enemy.TurnPriority &&!dedTeam)
         {
-            if (character.TurnPriority >= enemy.TurnPriority)
-            {
-                character.TurnPriority = 0;
-                DisplayCharacterTurn(character,characterCollection);
-            }
-            else
-            {
-                enemy.TurnPriority = 0;
-                DisplayEnemyTurn(enemy, characterCollection);
-            }
+            character.TurnPriority = 0;
+            DisplayCharacterTurn(character,characterCollection);
+        }
+        else if (!dedTeam)
+        {
+            enemy.TurnPriority = 0;
+            DisplayEnemyTurn(enemy);
             TurnCount+=1;
             UpdateTurnPriority();
             StartFight(characterCollection);
@@ -108,7 +105,7 @@ public class Combat
 
     }
 
-    public static bool ADeadTeam(List<Character> characterCollection)
+    public static bool ADeadTeam()
     {
         bool dedTeam = true;
         
@@ -180,20 +177,15 @@ public class Combat
     }
 
 
-    public static void DisplayEnemyTurn(Enemies enemy,List<Character> characterCollection)
+    public static void DisplayEnemyTurn(Enemies enemy)
     {
+        Console.WriteLine();
         Console.WriteLine("\u001b[31mEnemy\u001b[0m turn");
-        if (enemy.IsStuned) // Check if stunned
-        {
-            Console.WriteLine("The enemy is stunned. It cannot attack until next turn.");
-            Console.ReadKey();
-            enemy.IsStuned = false;
-        }
+        
         if (enemy.IsPoisonned) //Check if poisonned
         {
             Console.WriteLine("The enemy is poisoned. It loses "+enemy.HP/20+ "HP.");
             enemy.IsPoisonned = false;
-            Console.ReadKey();
             enemy.HP-=(enemy.HP/20);
         }
         Character characterTargeted = Dungeon.Team[0];
@@ -211,15 +203,22 @@ public class Combat
         int accuracyLuck = rdv.Next(1, 11);
         dodgeLuck += characterTargeted.buffedDodge;
         accuracyLuck += enemy.buffedAccuracy;
-        if (!enemy.IsStuned)
+        if (enemy.IsStuned) // Check if stunned
         {
+            Console.WriteLine("The enemy is stunned. It cannot attack until next turn.");
+            Console.ReadKey();
+            enemy.IsStuned = false;
+        }
+        else
+        {
+            Console.WriteLine();
             if (enemy.UltSkill.CooldownLeft == 0) //Ult skill
         {
-            DoesEnemyCooldown();
+            DoesEnemyCooldown(enemy);
             enemy.UltSkill.CooldownLeft = enemy.UltSkill.Cooldown;
             if (dodgeLuck > accuracyLuck)
             {
-                Console.WriteLine(characterTargeted.Name+" has \u001b[31mdodged\u001b[0m "+enemy.Name+"'s ultimate attack!");
+                Console.WriteLine("\u001b[33m"+characterTargeted.Name+"\u001b[0m has \u001b[31mdodged\u001b[0m \u001b[35m"+enemy.Name+"\u001b[0m's ultimate attack!");
             }
             else
             {
@@ -228,7 +227,7 @@ public class Combat
                     if (enemy.UltSkill.isSingleTarget) //SGT
                     {
                         characterTargeted.HP -= enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100;
-                        Console.WriteLine(enemy.Name + " attacked you with his ultimate skill and dealt "+enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100+" damage.");
+                        Console.WriteLine("\u001b[35m"+enemy.Name + "\u001b[0m attacked \u001b[33m"+characterTargeted.Name+"\u001b[0m with his ultimate skill and dealt "+enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100+" \u001b[31mdamage\u001b[0m.");
                     }
                     else
                     {
@@ -236,7 +235,7 @@ public class Combat
                         {
                             character.HP -= enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100;
                         }
-                        Console.WriteLine(enemy.Name + " attacked you with his ultimate skill and dealt "+enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100+" damage to all your characters.");
+                        Console.WriteLine("\u001b[35m"+enemy.Name + "\u001b[0m attacked \u001b[33mall allies\u001b[0m with his ultimate skill and dealt "+enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100+" \u001b[31mdamage\u001b[0m to all your characters.");
                     }
                 }
                 else if (enemy.UltSkill.DebuffEffect == "") //Buff attack
@@ -261,9 +260,9 @@ public class Combat
                         {
                             enemy.buffedAccuracy +=enemy.buffedAccuracy*enemy.UltSkill.buffPercentage/100;
                         }
-                        Console.WriteLine(enemy.Name + " attacked you with his ultimate skill and dealt "+enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100+
-                                          " damage, and buffed himself with a "+enemy.UltSkill.BuffEffect+"% "+enemy.UltSkill.buffPercentage+" boost.");
-                        characterTargeted.HP -= characterTargeted.buffedAtk * characterTargeted.UltSkill.AttackMultiplier / 100;
+                        Console.WriteLine("\u001b[35m"+enemy.Name + "\u001b[0m attacked \u001b[33mall allies\u001b with his ultimate skill and dealt \u001b[31m"+enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100+
+                                          " \u001b[0mdamage, and buffed himself with a \u001b[34m"+enemy.UltSkill.buffPercentage+"\u001b[0m% "+enemy.UltSkill.BuffEffect+" boost.");
+                        characterTargeted.HP -= enemy.buffedAtk * enemy.UltSkill.AttackMultiplier / 100;
                     }
                     else
                     {
@@ -300,8 +299,8 @@ public class Combat
                                 enem.IsBuffed = true;
                             }
                         }
-                        Console.WriteLine(enemy.Name + " attacked you with his ultimate skill and dealt "+enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100+
-                                          " damage to all your characters, and buffed his team with a "+enemy.UltSkill.BuffEffect+"% "+enemy.UltSkill.buffPercentage+" boost.");
+                        Console.WriteLine("\u001b[35m"+enemy.Name + "\u001b[0m attacked \u001b[33mall allies\u001b[0m with his ultimate skill and dealt \u001b[31m"+enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100+
+                                          " \u001b[0mdamage to all your characters, and buffed his team with a \u001b[34m"+enemy.UltSkill.buffPercentage+"\u001b[0m% "+enemy.UltSkill.BuffEffect+" boost.");
                         foreach (Character charac in Dungeon.Team) //AOE
                         {
                             charac.HP -= enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100;
@@ -320,10 +319,10 @@ public class Combat
                         {
                             characterTargeted.IsPoisonned = true;
                         }
-                        characterTargeted.HP -= characterTargeted.buffedAtk * characterTargeted.UltSkill.AttackMultiplier / 100;
-                        Console.WriteLine(characterTargeted.Name+" was inflicted with "+enemy.UltSkill.DebuffEffect+" debuff and took "+
-                                          characterTargeted.buffedAtk * characterTargeted.UltSkill.AttackMultiplier / 100+
-                                          " damage from "+enemy.Name+"'s ultimate skill!");
+                        characterTargeted.HP -= enemy.buffedAtk * enemy.UltSkill.AttackMultiplier / 100;
+                        Console.WriteLine("\u001b[33m"+characterTargeted.Name+"\u001b[0m was inflicted with \u001b[32m"+enemy.UltSkill.DebuffEffect+"\u001b[0m debuff and took \u001b[31m"+
+                                          enemy.buffedAtk * enemy.UltSkill.AttackMultiplier / 100+
+                                          " \u001b[0mdamage from \u001b[35m"+enemy.Name+"\u001b[0m's ultimate skill!");
                     }
                     else
                     {
@@ -339,9 +338,9 @@ public class Combat
                             }
                             charac.HP -= enemy.buffedAtk*enemy.UltSkill.AttackMultiplier/100;
                         }
-                        Console.WriteLine("All your characters were inflicted with "+enemy.UltSkill.DebuffEffect+" debuff and took "+
-                                          characterTargeted.buffedAtk * characterTargeted.UltSkill.AttackMultiplier / 100+
-                                          " damage from "+enemy.Name+"'s ultimate skill!");
+                        Console.WriteLine("\u001b[33mAll allies\u001b[0m were inflicted with \u001b[32m"+enemy.UltSkill.DebuffEffect+"\u001b[0m debuff and took \u001b[31m"+
+                                         enemy.buffedAtk * enemy.UltSkill.AttackMultiplier / 100+
+                                          "\u001b[0m damage from \u001b[35m"+enemy.Name+"\u001b[0m's ultimate skill!");
                     }
                 }
             }
@@ -349,11 +348,11 @@ public class Combat
         }
         else
         {
-            DoesEnemyCooldown();
+            DoesEnemyCooldown(enemy);
             enemy.UltSkill.CooldownLeft = enemy.UltSkill.Cooldown;
             if (dodgeLuck > accuracyLuck)
             {
-                Console.WriteLine(characterTargeted.Name+" has \u001b[31mdodged\u001b[0m "+enemy.Name+"'s attack!");
+                Console.WriteLine("\u001b[33m"+characterTargeted.Name+"\u001b[0m has \u001b[31mdodged\u001b[0m \u001b[35m"+enemy.Name+"\u001b[0m's ultimate attack!");
             }
             else
             {
@@ -362,7 +361,8 @@ public class Combat
                     if (enemy.Skill1.isSingleTarget) //SGT
                     {
                         characterTargeted.HP -= enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100;
-                        Console.WriteLine(enemy.Name + " attacked you and dealt "+enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100+" damage.");
+                        Console.WriteLine("\u001b[35m"+enemy.Name + "\u001b[0m attacked \u001b[33m"+characterTargeted.Name+
+                                          "\u001b[0m and dealt \u001b[31m"+enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100+"\u001b[0m damage.");
                     }
                     else
                     {
@@ -370,7 +370,8 @@ public class Combat
                         {
                             character.HP -= enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100;
                         }
-                        Console.WriteLine(enemy.Name + " attacked you and dealt "+enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100+" damage to all your characters.");
+                        Console.WriteLine("\u001b[35m"+enemy.Name + "\u001b[0m attacked \u001b[33mall allies\u001b[0m and dealt \u001b[31m"+enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100+
+                                          "\u001b[0m damage to all your characters.");
                     }
                 }
                 else if (enemy.Skill1.DebuffEffect == "") //Buff attack
@@ -395,9 +396,9 @@ public class Combat
                         {
                             enemy.buffedAccuracy +=enemy.buffedAccuracy*enemy.Skill1.buffPercentage/100;
                         }
-                        Console.WriteLine(enemy.Name + " attacked you and dealt "+enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100+
-                                          " damage, and buffed himself with a "+enemy.Skill1.BuffEffect+"% "+enemy.Skill1.buffPercentage+" boost.");
-                        characterTargeted.HP -= characterTargeted.buffedAtk * characterTargeted.Skill1.AttackMultiplier / 100;
+                        Console.WriteLine("\u001b[35m"+enemy.Name + "\u001b[0m attacked \u001b[33m"+characterTargeted.Name+"and dealt \u001b[31m"+enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100+
+                                          " \u001b[0mdamage, and buffed himself with a \u001b[34m"+enemy.Skill1.buffPercentage+"\u001b[0m% "+enemy.Skill1.BuffEffect+" boost.");
+                        characterTargeted.HP -= enemy.buffedAtk * enemy.Skill1.AttackMultiplier / 100;
                     }
                     else
                     {
@@ -434,8 +435,8 @@ public class Combat
                                 enem.IsBuffed = true;
                             }
                         }
-                        Console.WriteLine(enemy.Name + " attacked you and dealt "+enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100+
-                                          " damage to all your characters, and buffed his team with a "+enemy.Skill1.BuffEffect+"% "+enemy.Skill1.buffPercentage+" boost.");
+                        Console.WriteLine("\u001b[35m"+enemy.Name + "\u001b[0m attacked you and dealt \u001b[31m"+enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100+
+                                          "\u001b[0m damage to \u001b[33mall your characters\u001b[0m, and buffed his team with a \u001b[34m"+enemy.Skill1.buffPercentage+"\u001b[0m% "+enemy.Skill1.BuffEffect+" boost.");
                         foreach (Character charac in Dungeon.Team) //AOE
                         {
                             charac.HP -= enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100;
@@ -454,10 +455,10 @@ public class Combat
                         {
                             characterTargeted.IsPoisonned = true;
                         }
-                        characterTargeted.HP -= characterTargeted.buffedAtk * characterTargeted.Skill1.AttackMultiplier / 100;
-                        Console.WriteLine(characterTargeted.Name+" was inflicted with "+enemy.Skill1.DebuffEffect+" debuff and took "+
-                                          characterTargeted.buffedAtk * characterTargeted.Skill1.AttackMultiplier / 100+
-                                          " damage from "+enemy.Name+"!");
+                        characterTargeted.HP -= enemy.buffedAtk * enemy.Skill1.AttackMultiplier / 100;
+                        Console.WriteLine("\u001b[33m"+characterTargeted.Name+"\u001b[0m was inflicted with \u001b[32m"+enemy.Skill1.DebuffEffect+"\u001b[0m debuff and took \u001b[31m"+
+                                          enemy.buffedAtk * enemy.Skill1.AttackMultiplier / 100+
+                                          "\u001b[0m damage from \u001b[35m"+enemy.Name+"\u001b[0m!");
                     }
                     else
                     {
@@ -473,9 +474,9 @@ public class Combat
                             }
                             charac.HP -= enemy.buffedAtk*enemy.Skill1.AttackMultiplier/100;
                         }
-                        Console.WriteLine("All your characters were inflicted with "+enemy.Skill1.DebuffEffect+" debuff and took "+
-                                          characterTargeted.buffedAtk * characterTargeted.Skill1.AttackMultiplier / 100+
-                                          " damage from "+enemy.Name+"!");
+                        Console.WriteLine("\u001b[33mAll your characters\u001b[0m were inflicted with \u001b[32m"+enemy.Skill1.DebuffEffect+"\u001b[0m debuff and took \u001b[31m"+
+                                          enemy.buffedAtk * enemy.Skill1.AttackMultiplier / 100+
+                                          "\u001b[0m damage from \u001b[35m"+enemy.Name+"\u001b[0m!");
                     }
                 }
             }
@@ -674,10 +675,9 @@ public class Combat
             case ConsoleKey.Q:
                 if (character.Skill1.CooldownLeft == 0)
                 {
-                    DoesCharacterCooldown();
+                    DoesCharacterCooldown(character);
                     character.Skill1.CooldownLeft = character.Skill1.Cooldown;
                     AttackEnemy(Enemies.towerEnemies[Arrow-1],character,1, characterCollection);
-                    StartFight(characterCollection);
                 }
                 else
                 {
@@ -687,10 +687,9 @@ public class Combat
             case ConsoleKey.W:
                 if (character.Skill2.CooldownLeft == 0)
                 {
-                    DoesCharacterCooldown();
+                    DoesCharacterCooldown(character);
                     character.Skill2.CooldownLeft = character.Skill2.Cooldown;
                     AttackEnemy(Enemies.towerEnemies[Arrow-1],character,2, characterCollection);
-                    StartFight(characterCollection);
                 }
                 else
                 {
@@ -700,10 +699,9 @@ public class Combat
             case ConsoleKey.R:
                 if (character.UltSkill.CooldownLeft == 0)
                 {
-                    DoesCharacterCooldown();
+                    DoesCharacterCooldown(character);
                     character.UltSkill.CooldownLeft = character.UltSkill.Cooldown;
                     AttackEnemy(Enemies.towerEnemies[Arrow-1],character,3, characterCollection);
-                    StartFight(characterCollection);
                 }
                 else
                 {
@@ -751,30 +749,199 @@ public class Combat
                 break;
         }
         
+        Console.Clear();
+        isActive1 = "\u001b[0m";
+        isActive2 = "\u001b[0m";
+        isActive3 = "\u001b[0m";
+        arrowPointer = "\u001b[31m←\u001b[0m";
+
+        characterBuffsAndDebuffs1 = "  ";
+        characterBuffsAndDebuffs2 = "  ";
+        characterBuffsAndDebuffs3 = "  ";
+        characterBuffsAndDebuffs4 = "  ";
+        
+        sc1 =CalculateCubes(Dungeon.Team[0].MaxHP,Dungeon.Team[0].HP,false);
+        if (character == Dungeon.Team[0])
+        {
+            isActive1 = "\u001b[33m";
+            if (Dungeon.Team[0].IsBuffed)
+                characterBuffsAndDebuffs1 +="\u001b[34m⚔\u001b[0m ";
+            if (Dungeon.Team[0].IsPoisonned)
+                characterBuffsAndDebuffs1 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Dungeon.Team[0].IsStuned)
+                characterBuffsAndDebuffs1 += "\u001b[33m꩜"+ "\u001b[0m";
+
+        }
+        sc2="";
+        if (Dungeon.Team.Count>1)
+        {
+            sc2 = CalculateCubes(Dungeon.Team[1].MaxHP, Dungeon.Team[1].HP,false);
+            if (character == Dungeon.Team[1])
+                isActive2 = "\u001b[33m";
+            sc2 += "   " + isActive2 + Dungeon.Team[1].Name + "\u001b[0m";
+            if (Dungeon.Team[1].IsBuffed)
+                characterBuffsAndDebuffs2 +="\u001b[34m⚔\u001b[0m ";
+            if (Dungeon.Team[1].IsPoisonned)
+                characterBuffsAndDebuffs2 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Dungeon.Team[1].IsStuned)
+                characterBuffsAndDebuffs2 += "\u001b[33m꩜"+ "\u001b[0m";
+        }
+        sc3="";
+        if (Dungeon.Team.Count>2)
+        {
+            sc3 = CalculateCubes(Dungeon.Team[2].MaxHP, Dungeon.Team[2].HP,false);
+            if (character == Dungeon.Team[2])
+                isActive3 = "\u001b[33m";
+            sc3 += "   " + isActive3 + Dungeon.Team[2].Name + "\u001b[0m";
+            if (Dungeon.Team[2].IsBuffed)
+                characterBuffsAndDebuffs3 +="\u001b[34m⚔\u001b[0m ";
+            if (Dungeon.Team[2].IsPoisonned)
+                characterBuffsAndDebuffs3 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Dungeon.Team[2].IsStuned)
+                characterBuffsAndDebuffs3 += "\u001b[33m꩜"+ "\u001b[0m";
+        }
+        
+        characterHealthAndNames1 = sc1+"   "+isActive1+$"{Dungeon.Team[0].Name}\u001b[0m";
+        characterHealthAndNames2 = sc2+"\u001b[0m";
+        characterHealthAndNames3 = sc3+"\u001b[0m";
+        characterHealthAndNames1 = InsertsSpaces(characterHealthAndNames1,40);
+        characterHealthAndNames2 = InsertsSpaces(characterHealthAndNames2,40);
+        characterHealthAndNames3 = InsertsSpaces(characterHealthAndNames3,40);
+        characterHealthAndNames4 = InsertsSpaces("  ",40);
+
+        characterBuffsAndDebuffs1 = InsertsSpaces(characterBuffsAndDebuffs1, 40);
+        characterBuffsAndDebuffs2 = InsertsSpaces(characterBuffsAndDebuffs2, 40);
+        characterBuffsAndDebuffs3 = InsertsSpaces(characterBuffsAndDebuffs3, 40);
+        characterBuffsAndDebuffs4 = InsertsSpaces(characterBuffsAndDebuffs4, 40);
+
+        enemyBuffsAndDebuffs1 = "  ";
+        se1 =CalculateCubes(Enemies.towerEnemies[0].MaxHP,Enemies.towerEnemies[0].HP,true);
+        se1 += "   " + Enemies.towerEnemies[0].Name;
+        if (Enemies.towerEnemies[0].IsBuffed)
+            enemyBuffsAndDebuffs1 +="\u001b[34m⚔\u001b[0m ";
+        if (Enemies.towerEnemies[0].IsPoisonned)
+            enemyBuffsAndDebuffs1 += "\u001b[32m☠"+ "\u001b[0m ";
+        if (Enemies.towerEnemies[0].IsStuned)
+            enemyBuffsAndDebuffs1 += "\u001b[33m꩜"+ "\u001b[0m";
+        enemyBuffsAndDebuffs2 = "  ";
+        enemyBuffsAndDebuffs3 = "  ";
+        enemyBuffsAndDebuffs4 = "  ";
+        
+        se2="";
+        if (Enemies.towerEnemies.Count>1)
+        {
+            se2 = CalculateCubes(Enemies.towerEnemies[1].MaxHP, Enemies.towerEnemies[1].HP,true);
+            se2 += "   " + Enemies.towerEnemies[1].Name;
+            if (Enemies.towerEnemies[1].IsBuffed)
+                enemyBuffsAndDebuffs2 +="\u001b[34m⚔\u001b[0m ";
+            if (Enemies.towerEnemies[1].IsPoisonned)
+                enemyBuffsAndDebuffs2 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Enemies.towerEnemies[1].IsStuned)
+                enemyBuffsAndDebuffs2 += "\u001b[33m꩜"+ "\u001b[0m";
+            
+        }
+        se3="";
+        if (Enemies.towerEnemies.Count>2)
+        {
+            se3 = CalculateCubes(Enemies.towerEnemies[2].MaxHP, Enemies.towerEnemies[2].HP,true);
+            se3 += "   " + Enemies.towerEnemies[2].Name;
+            if (Enemies.towerEnemies[2].IsBuffed)
+                enemyBuffsAndDebuffs3 +="\u001b[34m⚔\u001b[0m ";
+            if (Enemies.towerEnemies[2].IsPoisonned)
+                enemyBuffsAndDebuffs3 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Enemies.towerEnemies[2].IsStuned)
+                enemyBuffsAndDebuffs3 += "\u001b[33m꩜"+ "\u001b[0m";
+        }
+        se4="";
+        if (Enemies.towerEnemies.Count>3)
+        {
+            se4 = CalculateCubes(Enemies.towerEnemies[3].MaxHP, Enemies.towerEnemies[3].HP,true);
+            se4 += "   " + Enemies.towerEnemies[3].Name;
+            if (Enemies.towerEnemies[3].IsBuffed)
+                enemyBuffsAndDebuffs4 +="\u001b[34m⚔\u001b[0m ";
+            if (Enemies.towerEnemies[3].IsPoisonned)
+                enemyBuffsAndDebuffs4 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Enemies.towerEnemies[3].IsStuned)
+                enemyBuffsAndDebuffs4 += "\u001b[33m꩜"+ "\u001b[0m";
+        }
+        
+        se1 = InsertsSpaces(se1,23);
+        se2 = InsertsSpaces(se2,23);
+        se3 = InsertsSpaces(se3,23);
+        se4 = InsertsSpaces(se4,23);
+        
+
+        enemyBuffsAndDebuffs1 = InsertsSpaces(enemyBuffsAndDebuffs1, 23);
+        enemyBuffsAndDebuffs2 = InsertsSpaces(enemyBuffsAndDebuffs2, 23);
+        enemyBuffsAndDebuffs3 = InsertsSpaces(enemyBuffsAndDebuffs3, 23);
+        enemyBuffsAndDebuffs4 = InsertsSpaces(enemyBuffsAndDebuffs4, 23);
+        
+        se1 +="|";
+        se2 +="|";
+        se3 +="|";
+        se4 +="|";
+        if (Arrow == 1)
+        {
+            se1 += arrowPointer;
+        }
+        else if (Arrow == 2)
+        {
+            se2 += arrowPointer;
+        }
+        else if (Arrow == 3)
+        {
+            se3 += arrowPointer;
+        }
+        else
+        {
+            se4 += arrowPointer;
+        }
+        
+        
+        Console.WriteLine("\n" +
+                          "                         \u001b[31mCombat\u001b[0m - \u001b[36mTower Level "+Dungeon.towerStageClear+"\u001b[0m\n");
+        Console.WriteLine("| "+characterHealthAndNames1+se1);
+        Console.WriteLine("| "+characterBuffsAndDebuffs1+enemyBuffsAndDebuffs1+"|");
+        
+        Console.WriteLine("| "+characterHealthAndNames2+se2);
+        Console.WriteLine("| "+characterBuffsAndDebuffs2+enemyBuffsAndDebuffs2+"|");
+        
+        Console.WriteLine("| "+characterHealthAndNames3+se3);
+        Console.WriteLine("| "+characterBuffsAndDebuffs3+enemyBuffsAndDebuffs3+"|");
+        
+        Console.WriteLine("| "+characterHealthAndNames4+se4);
+        Console.WriteLine("| "+characterBuffsAndDebuffs4+enemyBuffsAndDebuffs4+"|");
+        
+        if (displayChars)
+            DisplayCharacterInfo(character);
+        else
+        {
+            DisplayEnemyInfo(Enemies.towerEnemies[Arrow-1]);
+        }
+        Console.WriteLine("|                                                                       |\n" +
+                          "|\u001b[31m[<-]\u001b[0m                            \u001b[34mBack(b)\u001b[0m" +
+                          "                            \u001b[31m[->]\u001b[0m|\n" +
+                          "|                                                                       |\n" +
+                          "\\-----------------------------------------------------------------------/\n");
+        StartFight(characterCollection);
     }
 
-    public static void DoesCharacterCooldown()
+    public static void DoesCharacterCooldown(Character character)
     {
-        foreach (var character in Dungeon.Team)
-        {
-            if (character.Skill1.CooldownLeft > 0)
-                character.Skill1.CooldownLeft -= 1;
-            if (character.Skill2.CooldownLeft > 0)
-                character.Skill2.CooldownLeft -= 1;
-            if (character.UltSkill.CooldownLeft > 0)
-                character.UltSkill.CooldownLeft -= 1;
-        }
+        if (character.Skill1.CooldownLeft > 0)
+            character.Skill1.CooldownLeft -= 1;
+        if (character.Skill2.CooldownLeft > 0)
+            character.Skill2.CooldownLeft -= 1;
+        if (character.UltSkill.CooldownLeft > 0)
+            character.UltSkill.CooldownLeft -= 1;
     }
 
-    public static void DoesEnemyCooldown()
+    public static void DoesEnemyCooldown(Enemies enemy)
     {
-        foreach (var enemy in Enemies.towerEnemies)
-        {
-            if (enemy.Skill1.CooldownLeft > 0)
-                enemy.Skill1.CooldownLeft -= 1;
-            if (enemy.UltSkill.CooldownLeft > 0)
-                enemy.UltSkill.CooldownLeft -= 1;
-        }
+        if (enemy.Skill1.CooldownLeft > 0)
+            enemy.Skill1.CooldownLeft -= 1;
+        if (enemy.UltSkill.CooldownLeft > 0)
+            enemy.UltSkill.CooldownLeft -= 1;
     }
 
     public static void AttackEnemy(Enemies enemies, Character character, int skill, List<Character> characterCollection)
@@ -789,14 +956,12 @@ public class Combat
         if (character.IsStuned)
         {
             Console.WriteLine("The character is stunned. It cannot attack until next turn.");
-            Console.ReadKey();
             character.IsStuned = false;
         } //Check Stuned
         if (character.IsPoisonned)
         {
             Console.WriteLine("The character is poisoned. It loses "+character.HP/20+ "HP.");
             character.IsPoisonned = false;
-            Console.ReadKey();
             character.HP-=(character.HP/20);
         }
         if (dodgeLuck>accuracyLuck)
@@ -1353,6 +1518,13 @@ public class Combat
 
                     len += 3;
                 }
+                
+                else
+                {
+                    res += " " + character.Skill1.CooldownLeft + "T";
+                    
+                    len += 3;
+                }
             }
             while (len < 71)
             {
@@ -1413,6 +1585,12 @@ public class Combat
 
                     len += 3;
                 }
+                else
+                {
+                    res += " " + character.Skill2.CooldownLeft + "T";
+                    
+                    len += 3;
+                }
             }
             while (len < 71)
             {
@@ -1470,6 +1648,12 @@ public class Combat
                 {
                     res += "[R]";
 
+                    len += 3;
+                }
+                else
+                {
+                    res += " " + character.UltSkill.CooldownLeft + "T";
+                    
                     len += 3;
                 }
             }
