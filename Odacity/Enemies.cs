@@ -67,25 +67,25 @@ public class Enemies
         enemy3.Attack = 50 + Dungeon.towerStageClear;
         enemy4.Attack = 120 + Dungeon.towerStageClear;
 
-        enemy1.Accuracy = 10*Dungeon.towerStageClear / 11 + 10;
-        enemy2.Accuracy = 10*Dungeon.towerStageClear / 14 + 10;
-        enemy3.Accuracy = 10*Dungeon.towerStageClear / 20 + 10;
-        enemy4.Accuracy = 10*Dungeon.towerStageClear / 13 + 10;
+        enemy1.Accuracy = 10*Dungeon.towerStageClear / 11 + 15;
+        enemy2.Accuracy = 10*Dungeon.towerStageClear / 14 + 15;
+        enemy3.Accuracy = 10*Dungeon.towerStageClear / 20 + 5;
+        enemy4.Accuracy = 10*Dungeon.towerStageClear / 13 + 20;
 
-        enemy1.Dodge = 10*Dungeon.towerStageClear/ 14 + 10;
-        enemy2.Dodge = 10*Dungeon.towerStageClear/ 11 + 10;
+        enemy1.Dodge = 10*Dungeon.towerStageClear/ 14 + 15;
+        enemy2.Dodge = 10*Dungeon.towerStageClear/ 11 + 12;
         enemy3.Dodge = 10*Dungeon.towerStageClear/ 20 + 10;
-        enemy4.Dodge = 10*Dungeon.towerStageClear/ 13 + 10;
+        enemy4.Dodge = 10*Dungeon.towerStageClear/ 13 + 5;
         
-        enemy1.Speed = 10*Dungeon.towerStageClear/ 11 + 10;
-        enemy2.Speed = 10*Dungeon.towerStageClear/ 16 + 10;
-        enemy3.Speed = 10*Dungeon.towerStageClear/ 22 + 10;
-        enemy4.Speed = 10*Dungeon.towerStageClear/ 22 + 10;
+        enemy1.Speed = 10*Dungeon.towerStageClear/ 11 + 130;
+        enemy2.Speed = 10*Dungeon.towerStageClear/ 16 + 90;
+        enemy3.Speed = 10*Dungeon.towerStageClear/ 22 + 50;
+        enemy4.Speed = 10*Dungeon.towerStageClear/ 22 + 60;
         
-        enemy1.MaxHP = 300+Dungeon.towerStageClear*5;
+        enemy1.MaxHP = 150+Dungeon.towerStageClear*7;
         enemy2.MaxHP = 300+Dungeon.towerStageClear*20;
-        enemy3.MaxHP = 300+Dungeon.towerStageClear*30;
-        enemy4.MaxHP = 300+Dungeon.towerStageClear*10;
+        enemy3.MaxHP = 400+Dungeon.towerStageClear*30;
+        enemy4.MaxHP = 120+Dungeon.towerStageClear*5;
 
         enemy1.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("C");
         enemy2.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("R");

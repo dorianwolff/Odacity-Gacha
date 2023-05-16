@@ -674,6 +674,7 @@ public class Combat
         
         Console.WriteLine("\n" +
                           "                         \u001b[31mCombat\u001b[0m - \u001b[36mTower Level "+Dungeon.towerStageClear+"\u001b[0m\n");
+        Console.WriteLine("/-----------------------------------------------------------------------\\");
         Console.WriteLine("| "+characterHealthAndNames1+se1);
         Console.WriteLine("| "+characterBuffsAndDebuffs1+enemyBuffsAndDebuffs1+"|");
         
@@ -709,7 +710,7 @@ public class Combat
                 }
                 break;
             case ConsoleKey.S:
-                DisplayStats(character,characterCollection);
+                DisplayStats(character, Enemies.towerEnemies[Arrow-1]);
                 DisplayCharacterTurn(character, characterCollection);
                 break;
             case ConsoleKey.Q:
@@ -956,6 +957,7 @@ public class Combat
         
         Console.WriteLine("\n" +
                           "                         \u001b[31mCombat\u001b[0m - \u001b[36mTower Level "+Dungeon.towerStageClear+"\u001b[0m\n");
+        Console.WriteLine("/-----------------------------------------------------------------------\\");
         Console.WriteLine("| "+characterHealthAndNames1+se1);
         Console.WriteLine("| "+characterBuffsAndDebuffs1+enemyBuffsAndDebuffs1+"|");
         
@@ -982,70 +984,112 @@ public class Combat
         StartFight(characterCollection);
     }
 
-    public static void DisplayStats(Character character, List<Character> characterCollection)
+    public static void DisplayStats(Character character, Enemies enemy)
     {
         Console.Clear();
-
-        Console.WriteLine("/-------------------------------------------\\\n" +
-                          "|            \u001b[35mCharacter Details\u001b[0m              |\n" +
-                          "|                                           |\n" +
-                          $"|Rarity : ({character.Color}{character.Grade}\u001b[0m)                               |");
+        
         string s = $"|Name :{character.Name}";
         while (s.Length<44)
         {
             s += " ";
         }
-        Console.WriteLine(s+"|");
+        s+= $"| |Name :{enemy.Name}";
+        while (s.Length<90)
+        {
+            s += " ";
+        }
         string z = $"|Nickname : {character.Nickname}";
         while (z.Length<44)
         {
             z += " ";
         }
-        Console.WriteLine(z+"|");
+        z+= $"| |Nickname : {enemy.Nickname}";
+        while (z.Length<90)
+        {
+            z += " ";
+        }
         string lev = $"|Level : \u001b[31m{character.Level}\u001b[0m      Exp : {character.Experience}/{character.MaxExperience}" +
                      $"       AWAKEN : \u001b[35m{character.awakening}\u001b[0m";
         while (lev.Length<62)
         {
             lev += " ";
         }
-        Console.WriteLine(lev+"|");
-        Console.WriteLine("|                                           |\n"
-                          +"|             \u001b[34mCharacter Stats\u001b[0m               |");
+        lev += "| |";
+        while (lev.Length<108)
+        {
+            lev += " ";
+        }
         string y = $"|Attack : {character.Attack} \u001b[34m(+{character.buffedAtk-character.Attack})\u001b[0m";
-        while (y.Length<44)
+        while (y.Length<53)
         {
             y += " ";
         }
-        Console.WriteLine(y+"|");
+        y+= $"| |Attack : {enemy.Attack} \u001b[34m(+{enemy.buffedAtk-enemy.Attack})\u001b[0m";
+        while (y.Length<108)
+        {
+            y += " ";
+        }
         string w = $"|HP : {character.HP}/{character.MaxHP} ";
         while (w.Length<44)
         {
             w += " ";
         }
-        Console.WriteLine(w+"|");
+        w+= $"| |HP : {enemy.HP}/{enemy.MaxHP} ";
+        while (w.Length<90)
+        {
+            w += " ";
+        }
         string x = $"|Speed : {character.Speed} \u001b[34m(+{character.buffedSpeed-character.Speed})\u001b[0m";
-        while (x.Length<44)
+        while (x.Length<53)
         {
             x += " ";
         }
-        Console.WriteLine(x+"|");
+        x+= $"| |Speed : {enemy.Speed} \u001b[34m(+{enemy.buffedSpeed-enemy.Speed})\u001b[0m";
+        while (x.Length<108)
+        {
+            x += " ";
+        }
         string v = $"|Dodge : {character.Dodge} \u001b[34m(+{character.buffedDodge-character.Dodge})\u001b[0m";
-        while (v.Length<44)
+        while (v.Length<53)
         {
             v += " ";
         }
-        Console.WriteLine(v+"|");
+        v+= $"| |Dodge : {enemy.Dodge} \u001b[34m(+{enemy.buffedDodge-enemy.Dodge})\u001b[0m";
+        while (v.Length<108)
+        {
+            v += " ";
+        }
         string u = $"|Accuracy : {character.Accuracy} \u001b[34m(+{character.buffedAccuracy-character.Accuracy})\u001b[0m";
-        while (u.Length<44)
+        while (u.Length<53)
         {
             u += " ";
         }
+        u+= $"| |Accuracy : {enemy.Accuracy} \u001b[34m(+{enemy.buffedAccuracy-enemy.Accuracy})\u001b[0m";
+        while (u.Length<108)
+        {
+            u += " ";
+        }
+        Console.WriteLine("/-------------------------------------------\\" +" /-------------------------------------------\\\n"+
+                          "|            \u001b[33mCharacter Details\u001b[0m              |" +" |              \u001b[35mEnemy Details\u001b[0m                |\n"+
+                          "|                                           |" +" |                                           |\n" +
+                          $"|Rarity : ({character.Color}{character.Grade}\u001b[0m)                               |"+
+                          " |                                           |");
+        Console.WriteLine(s+"|");
+        Console.WriteLine(z+"|");
+        Console.WriteLine(lev+"|");
+        Console.WriteLine("|                                           |"+" |                                           |\n"
+                          +"|             \u001b[34mCharacter Stats\u001b[0m               |"+" |               \u001b[34mEnemy Stats\u001b[0m                 |");
+        Console.WriteLine(y+"|");
+        Console.WriteLine(w+"|");
+        Console.WriteLine(x+"|");
+        Console.WriteLine(v+"|");
         Console.WriteLine(u+"|");
-        Console.WriteLine("|                                           |\n" +
-                          "\\-------------------------------------------/\n");
+
+        Console.WriteLine("|                                           |" +" |                                           |\n"+
+                          "\\-------------------------------------------/"+" \\-------------------------------------------/\n");
 
         Console.ReadKey();
-    }
+    } 
 
     public static void DoesCharacterCooldown(Character character)
     {
@@ -1898,7 +1942,7 @@ public class Combat
         tempFastest.TurnPriority = 0;
         foreach (Character character in Dungeon.Team)
         {
-            if (character.TurnPriority > tempFastest.TurnPriority)
+            if (character.TurnPriority > tempFastest.TurnPriority && character.IsAlive)
                 tempFastest = character;
         }
 
@@ -1911,7 +1955,7 @@ public class Combat
         tempFastest.TurnPriority = 0;
         foreach (Enemies enemy in Enemies.towerEnemies)
         {
-            if (enemy.TurnPriority > tempFastest.TurnPriority)
+            if (enemy.TurnPriority > tempFastest.TurnPriority && enemy.IsAlive)
                 tempFastest = enemy;
         }
 
