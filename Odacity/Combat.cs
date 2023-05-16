@@ -206,7 +206,6 @@ public class Combat
         if (enemy.IsStuned) // Check if stunned
         {
             Console.WriteLine("The enemy is stunned. It cannot attack until next turn.");
-            Console.ReadKey();
             enemy.IsStuned = false;
         }
         else
@@ -344,7 +343,6 @@ public class Combat
                     }
                 }
             }
-            Console.ReadKey();
         }
         else
         {
@@ -352,7 +350,7 @@ public class Combat
             enemy.UltSkill.CooldownLeft = enemy.UltSkill.Cooldown;
             if (dodgeLuck > accuracyLuck)
             {
-                Console.WriteLine("\u001b[33m"+characterTargeted.Name+"\u001b[0m has \u001b[31mdodged\u001b[0m \u001b[35m"+enemy.Name+"\u001b[0m's ultimate attack!");
+                Console.WriteLine("\u001b[33m"+characterTargeted.Name+"\u001b[0m has \u001b[31mdodged\u001b[0m \u001b[35m"+enemy.Name+"\u001b[0m's attack!");
             }
             else
             {
@@ -480,9 +478,9 @@ public class Combat
                     }
                 }
             }
-            Console.ReadKey();
         }
         }
+        Console.ReadKey();
     }
 
     public static void DisplayCharacterTurn(Character character,List<Character> characterCollection)
@@ -955,18 +953,18 @@ public class Combat
         accuracyLuck += character.buffedAccuracy;
         if (character.IsStuned)
         {
-            Console.WriteLine("The character is stunned. It cannot attack until next turn.");
+            Console.WriteLine(character.Name+" is \u001b[32mstunned\u001b[0m. It cannot attack until next turn.");
             character.IsStuned = false;
         } //Check Stuned
         if (character.IsPoisonned)
         {
-            Console.WriteLine("The character is poisoned. It loses "+character.HP/20+ "HP.");
+            Console.WriteLine(character.Name+" is \u001b[32mpoisoned\u001b[0m. It loses "+character.HP/20+ "HP.");
             character.IsPoisonned = false;
             character.HP-=(character.HP/20);
         }
         if (dodgeLuck>accuracyLuck)
         {
-            Console.WriteLine("The enemy \u001b[31mdodged\u001b[0m!");
+            Console.WriteLine("The enemy \u001b[31mdodged\u001b[0m "+character.Name+"'s attack!");
             Console.ReadKey();
         }
         else if (!character.IsStuned)
@@ -978,8 +976,8 @@ public class Combat
                     if (character.Skill1.isSingleTarget) //SGT
                     {
                         enemies.HP -= character.buffedAtk * character.Skill1.AttackMultiplier / 100;
-                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
-                                          " damage to "+enemies.Name+"!");
+                        Console.WriteLine("\u001b[33m"+character.Name+" has dealt \u001b[31m"+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
+                                          "\u001b[0m damage to \u001b[35m"+enemies.Name+"\u001b[0m!");
                     }
                     else
                     {
@@ -987,8 +985,8 @@ public class Combat
                         {
                             enemy.HP -= character.buffedAtk*character.Skill1.AttackMultiplier/100;
                         }
-                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
-                                          " damage to all enemies!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has dealt \u001b[31m"+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
+                                          "\u001b[0m damage to \u001b[35mall enemies\u001b[0m!");
                     }
                     
                 }
@@ -1014,9 +1012,9 @@ public class Combat
                         {
                             character.buffedAccuracy +=character.buffedAccuracy*character.Skill1.buffPercentage/100;
                         }
-                        Console.WriteLine(character.Name+" has buffed himself by "+character.Skill1.buffPercentage+
-                                          "% of "+character.Skill1.BuffEffect+" and has dealt "+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
-                                          " damage to " + enemies.Name+"!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has buffed himself by \u001b[34m"+character.Skill1.buffPercentage+
+                                          "\u001b[0m% of "+character.Skill1.BuffEffect+" and has dealt \u001b[31m"+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
+                                          "\u001b[0m damage to \u001b[35m" + enemies.Name+"\u001b[0m!");
                         enemies.HP -= character.buffedAtk * character.Skill1.AttackMultiplier / 100;
                     }
                     else
@@ -1058,9 +1056,9 @@ public class Combat
                         {
                             enemy.HP -= character.buffedAtk*character.Skill1.AttackMultiplier/100;
                         }
-                        Console.WriteLine(character.Name+" has buffed your team by "+character.Skill1.buffPercentage+
-                                          "% of "+character.Skill1.BuffEffect+" and has dealt "+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
-                                          " damage to all enemies!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has buffed your team by \u001b[34m"+character.Skill1.buffPercentage+
+                                          "\u001b[0m% of "+character.Skill1.BuffEffect+" and has dealt \u001b[31m"+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
+                                          "\u001b[0m damage to \u001b[35mall enemies\u001b[0m!");
                     }
                     
                 }
@@ -1077,9 +1075,9 @@ public class Combat
                             enemies.IsPoisonned = true;
                         }
                         enemies.HP -= character.buffedAtk * character.Skill1.AttackMultiplier / 100;
-                        Console.WriteLine(character.Name+" has inflicted "+character.Skill1.DebuffEffect+" on "+
-                                          enemies.Name+" and has dealt "+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
-                                          " damage!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has inflicted \u001b[32m"+character.Skill1.DebuffEffect+" on "+
+                                          enemies.Name+"\u001b[0m and has dealt \u001b[31m"+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
+                                          "\u001b[0m damage!");
                     }
                     else
                     {
@@ -1095,8 +1093,8 @@ public class Combat
                             }
                             enemy.HP -= character.buffedAtk*character.Skill1.AttackMultiplier/100;
                         }
-                        Console.WriteLine(character.Name+" has inflicted "+character.Skill1.DebuffEffect+" on all enemies and has dealt "
-                                          +character.buffedAtk * character.Skill1.AttackMultiplier / 100+ " damage!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has inflicted \u001b[32m"+character.Skill1.DebuffEffect+"\u001b[0m on \u001b[35mall enemies\u001b[0m and has dealt \u001b[31m"
+                                          +character.buffedAtk * character.Skill1.AttackMultiplier / 100+ "\u001b[0m damage!");
                     }
                 }
             }
@@ -1107,8 +1105,8 @@ public class Combat
                     if (character.Skill2.isSingleTarget) //SGT
                     {
                         enemies.HP -= character.buffedAtk * character.Skill2.AttackMultiplier / 100;
-                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
-                                          " damage to "+enemies.Name+"!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has dealt \u001b[31m"+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
+                                          "\u001b[0m damage to \u001b[35m"+enemies.Name+"\u001b[0m!");
                     }
                     else
                     {
@@ -1116,8 +1114,8 @@ public class Combat
                         {
                             enemy.HP -= character.buffedAtk*character.Skill2.AttackMultiplier/100;
                         }
-                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
-                                          " damage to all enemies!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has dealt \u001b[31m"+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
+                                          "\u001b[0m damage to \u001b[35mall enemies\u001b[0m!");
                     }
                     
                 }
@@ -1144,9 +1142,9 @@ public class Combat
                             character.buffedAccuracy +=character.buffedAccuracy*character.Skill2.buffPercentage/100;
                         }
                         enemies.HP -= character.buffedAtk * character.Skill2.AttackMultiplier / 100;
-                        Console.WriteLine(character.Name+" has buffed himself by "+character.Skill2.buffPercentage+
-                                          "% of "+character.Skill2.BuffEffect+" and has dealt "+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
-                                          " damage to " + enemies.Name+"!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has buffed himself by \u001b[34m"+character.Skill2.buffPercentage+
+                                          "\u001b[0m% of "+character.Skill2.BuffEffect+" and has dealt \u001b[31m"+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
+                                          "\u001b[0m damage to \u001b[35m" + enemies.Name+"\u001b[0m!");
                     }
                     else
                     {
@@ -1187,9 +1185,9 @@ public class Combat
                         {
                             enemy.HP -= character.buffedAtk*character.Skill2.AttackMultiplier/100;
                         }
-                        Console.WriteLine(character.Name+" has buffed your team by "+character.Skill2.buffPercentage+
-                                          "% of "+character.Skill2.BuffEffect+" and has dealt "+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
-                                          " damage to all enemies!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has buffed your team by \u001b[34m"+character.Skill2.buffPercentage+
+                                          "\u001b[0m% of "+character.Skill2.BuffEffect+" and has dealt \u001b[31m"+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
+                                          "\u001b[0m damage to \u001b[35mall enemies\u001b[0m!");
                     }
                     
                 }
@@ -1206,9 +1204,9 @@ public class Combat
                             enemies.IsPoisonned = true;
                         }
                         enemies.HP -= character.buffedAtk * character.Skill2.AttackMultiplier / 100;
-                        Console.WriteLine(character.Name+" has inflicted "+character.Skill2.DebuffEffect+" on "+
-                                          enemies.Name+" and has dealt "+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
-                                          " damage!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has inflicted \u001b[32m"+character.Skill2.DebuffEffect+"\u001b[0m on \u001b[35m"+
+                                          enemies.Name+"\u001b[0m and has dealt \u001b[31m"+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
+                                          "\u001b[0m damage!");
                     }
                     else
                     {
@@ -1224,8 +1222,8 @@ public class Combat
                             }
                             enemy.HP -= character.buffedAtk*character.Skill2.AttackMultiplier/100;
                         }
-                        Console.WriteLine(character.Name+" has inflicted "+character.Skill2.DebuffEffect+" on all enemies and has dealt "
-                                          +character.buffedAtk * character.Skill2.AttackMultiplier / 100+ " damage!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has inflicted \u001b[32m"+character.Skill2.DebuffEffect+"\u001b[0m on \u001b[35mall enemies\u001b[0m and has dealt \u001b[31m"
+                                          +character.buffedAtk * character.Skill2.AttackMultiplier / 100+ "\u001b[0m damage!");
                     }
                 }
             }
@@ -1236,8 +1234,8 @@ public class Combat
                     if (character.UltSkill.isSingleTarget) //SGT
                     {
                         enemies.HP -= character.buffedAtk * character.UltSkill.AttackMultiplier / 100;
-                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
-                                          " damage to "+enemies.Name+"!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has dealt \u001b[31m"+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
+                                          "\u001b[0m damage to \u001b[35m"+enemies.Name+"\u001b[0m!");
                     }
                     else
                     {
@@ -1245,8 +1243,8 @@ public class Combat
                         {
                             enemy.HP -= character.buffedAtk*character.UltSkill.AttackMultiplier/100;
                         }
-                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
-                                          " damage to all enemies!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has dealt \u001b[31m"+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
+                                          "\u001b[0m damage to \u001b[35mall enemies\u001b[0m!");
                     }
                 }
                 else if (character.UltSkill.DebuffEffect == "") //BUFF
@@ -1272,9 +1270,9 @@ public class Combat
                             character.buffedAccuracy +=character.buffedAccuracy*character.UltSkill.buffPercentage/100;
                         }
                         enemies.HP -= character.buffedAtk * character.UltSkill.AttackMultiplier / 100;
-                        Console.WriteLine(character.Name+" has buffed himself by "+character.UltSkill.buffPercentage+
-                                          "% of "+character.UltSkill.BuffEffect+" and has dealt "+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
-                                          " damage to " + enemies.Name+"!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has buffed himself by \u001b[34m"+character.UltSkill.buffPercentage+
+                                          "\u001b[0m% of "+character.UltSkill.BuffEffect+" and has dealt \u001b[31m"+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
+                                          "\u001b[0m damage to \u001b[35m" + enemies.Name+"\u001b[0m!");
                     }
                     else
                     {
@@ -1316,9 +1314,9 @@ public class Combat
                         {
                             enemy.HP -= character.buffedAtk*character.UltSkill.AttackMultiplier/100;
                         }
-                        Console.WriteLine(character.Name+" has buffed your team by "+character.UltSkill.buffPercentage+
-                                          "% of "+character.UltSkill.BuffEffect+" and has dealt "+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
-                                          " damage to all enemies!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has buffed your team by \u001b[34m"+character.UltSkill.buffPercentage+
+                                          "\u001b[0m% of "+character.UltSkill.BuffEffect+" and has dealt \u001b[31m"+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
+                                          "\u001b[0m damage to all enemies!");
                     }
                     
                 }
@@ -1335,9 +1333,9 @@ public class Combat
                             enemies.IsPoisonned = true;
                         }
                         enemies.HP -= character.buffedAtk * character.UltSkill.AttackMultiplier / 100;
-                        Console.WriteLine(character.Name+" has inflicted "+character.UltSkill.DebuffEffect+" on "+
-                                          enemies.Name+" and has dealt "+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
-                                          " damage!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has inflicted \u001b[32m"+character.UltSkill.DebuffEffect+"\u001b[0m on \u001b[35m"+
+                                          enemies.Name+"\u001b[0m and has dealt \u001b[31m"+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
+                                          "\u001b[0m damage!");
                     }
                     else
                     {
@@ -1353,8 +1351,8 @@ public class Combat
                             }
                             enemy.HP -= character.buffedAtk*character.UltSkill.AttackMultiplier/100;
                         }
-                        Console.WriteLine(character.Name+" has inflicted "+character.UltSkill.DebuffEffect+" on all enemies and has dealt "
-                                          +character.buffedAtk * character.UltSkill.AttackMultiplier / 100+ " damage!");
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has inflicted \u001b[32m"+character.UltSkill.DebuffEffect+"\u001b[0m on \u001b[35mall enemies\u001b[0m and has dealt \u001b[31m"
+                                          +character.buffedAtk * character.UltSkill.AttackMultiplier / 100+ "\u001b[0m damage!");
                     }
                 }
             }

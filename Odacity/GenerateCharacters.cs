@@ -582,7 +582,7 @@ public class GenerateCharacters
             if (debuffType == 1)
             {
                 debuffT = "stun";
-                normal.isSingleTarget = false;
+                normal.isSingleTarget = true;
                 dmg /= 2;
             }
             normal.AttackMultiplier = dmg;
