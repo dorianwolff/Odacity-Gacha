@@ -34,6 +34,7 @@ public class Enemies
     public bool IsPoisonned { get; set; }
     
     public bool IsBuffed { get; set; }
+    public int nbTurnsBuffed { get; set; }
     
     public Skill Skill1 { get; set; }
     public Skill UltSkill { get; set; }
@@ -46,10 +47,10 @@ public class Enemies
         Enemies enemy4 = new Enemies();
 
         //Needs random name generation
-        enemy1.Name = "ASSASSIN";
-        enemy2.Name = "WARRIOR";
-        enemy3.Name = "TANK";
-        enemy4.Name = "ARCHER";
+        enemy1.Name = "Cringe"; //ASSASSIN
+        enemy2.Name = "Gutz"; //WARRIOR
+        enemy3.Name = "Hodor"; //TANK
+        enemy4.Name = "Lyndis"; //DPS
         
         enemy1.Nickname = "Silent Fart";
         enemy2.Nickname = "Bloody Berserker";
@@ -61,30 +62,30 @@ public class Enemies
         enemy3.Level = Dungeon.towerStageClear; //TANK
         enemy4.Level = Dungeon.towerStageClear; //DPS
 
-        enemy1.Attack = 10 + Dungeon.towerStageClear;
-        enemy2.Attack = 8 + Dungeon.towerStageClear;
-        enemy3.Attack = 5 + Dungeon.towerStageClear;
-        enemy4.Attack = 12 + Dungeon.towerStageClear;
+        enemy1.Attack = 100 + Dungeon.towerStageClear;
+        enemy2.Attack = 80 + Dungeon.towerStageClear;
+        enemy3.Attack = 50 + Dungeon.towerStageClear;
+        enemy4.Attack = 120 + Dungeon.towerStageClear;
 
-        enemy1.Accuracy = Dungeon.towerStageClear / 11 + 1;
-        enemy2.Accuracy = Dungeon.towerStageClear / 14 + 1;
-        enemy3.Accuracy = Dungeon.towerStageClear / 20 + 1;
-        enemy4.Accuracy = Dungeon.towerStageClear / 13 + 1;
+        enemy1.Accuracy = 10*Dungeon.towerStageClear / 11 + 10;
+        enemy2.Accuracy = 10*Dungeon.towerStageClear / 14 + 10;
+        enemy3.Accuracy = 10*Dungeon.towerStageClear / 20 + 10;
+        enemy4.Accuracy = 10*Dungeon.towerStageClear / 13 + 10;
 
-        enemy1.Dodge = Dungeon.towerStageClear/ 14 + 1;
-        enemy2.Dodge = Dungeon.towerStageClear/ 11 + 1;
-        enemy3.Dodge = Dungeon.towerStageClear/ 20 + 1;
-        enemy4.Dodge = Dungeon.towerStageClear/ 13 + 1;
+        enemy1.Dodge = 10*Dungeon.towerStageClear/ 14 + 10;
+        enemy2.Dodge = 10*Dungeon.towerStageClear/ 11 + 10;
+        enemy3.Dodge = 10*Dungeon.towerStageClear/ 20 + 10;
+        enemy4.Dodge = 10*Dungeon.towerStageClear/ 13 + 10;
         
-        enemy1.Speed = Dungeon.towerStageClear/ 11 + 1;
-        enemy2.Speed = Dungeon.towerStageClear/ 16 + 1;
-        enemy3.Speed = Dungeon.towerStageClear/ 22 + 1;
-        enemy4.Speed = Dungeon.towerStageClear/ 22 + 1;
+        enemy1.Speed = 10*Dungeon.towerStageClear/ 11 + 10;
+        enemy2.Speed = 10*Dungeon.towerStageClear/ 16 + 10;
+        enemy3.Speed = 10*Dungeon.towerStageClear/ 22 + 10;
+        enemy4.Speed = 10*Dungeon.towerStageClear/ 22 + 10;
         
-        enemy1.MaxHP = 30+Dungeon.towerStageClear/ 2;
-        enemy2.MaxHP = 30+Dungeon.towerStageClear*2;
-        enemy3.MaxHP = 30+Dungeon.towerStageClear*3;
-        enemy4.MaxHP = 30+Dungeon.towerStageClear;
+        enemy1.MaxHP = 300+Dungeon.towerStageClear*5;
+        enemy2.MaxHP = 300+Dungeon.towerStageClear*20;
+        enemy3.MaxHP = 300+Dungeon.towerStageClear*30;
+        enemy4.MaxHP = 300+Dungeon.towerStageClear*10;
 
         enemy1.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("C");
         enemy2.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("R");

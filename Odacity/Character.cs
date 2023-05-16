@@ -34,6 +34,7 @@ public class Character
     public int buffedAccuracy { get; set; }
     
     public bool IsBuffed { get; set; }
+    public int nbTurnsBuffed { get; set; }
     public bool IsStuned { get; set; }
     
     public bool IsPoisonned { get; set; }

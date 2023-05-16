@@ -306,6 +306,7 @@ public class GenerateCharacters
                 debuffT = "stun";
                 normal.isSingleTarget = true;
                 dmg /= 2;
+                allEnemies = "on target enemy";
             }
             normal.AttackMultiplier = dmg;
             normal.Description = normalnames + " : An annoying \u001b[35m"+single+"\u001b[0m skill " +
@@ -584,6 +585,7 @@ public class GenerateCharacters
                 debuffT = "stun";
                 normal.isSingleTarget = true;
                 dmg /= 2;
+                allEnemies = "on target enemy";
             }
             normal.AttackMultiplier = dmg;
             normal.Description = normalnames + " : An annoying \u001b[35m"+single+"\u001b[0m skill " +

@@ -252,10 +252,10 @@ public class Summon
     private List<Character> GenerateSummonableCharacters()
     {
         // Generate amount
-        int cNum = 12;
-        int rNum = 8;
-        int eNum = 6;
-        int lNum = 4;
+        int cNum = 16;
+        int rNum = 10;
+        int eNum = 8;
+        int lNum = 5;
         
         //
         
@@ -376,16 +376,16 @@ public class Summon
     private void calculateStats(string grade,Character c)
     {
         Random rdA = new Random();
-        int rdAtk = rdA.Next(1, 10);
+        int rdAtk = rdA.Next(10, 100);
 
         Random rdH = new Random();
-        int rdHp = rdH.Next(10, 30);
+        int rdHp = rdH.Next(100, 300);
 
         Random rdAc = new Random();
-        int rdAcc = rdAc.Next(0, 2);
+        int rdAcc = rdAc.Next(0, 20);
 
         Random rds = new Random();
-        int rdSpeed = rds.Next(1, 100);
+        int rdSpeed = rds.Next(20, 100);
         
         switch (grade)
         {
@@ -393,32 +393,32 @@ public class Summon
                 c.Attack = rdAtk;
                 c.HP = rdHp;
                 c.Accuracy = rdAcc;
-                c.Dodge = 10 - rdAcc - 8;
+                c.Dodge = 100 - rdAcc - 80;
                 c.Speed = rdSpeed;
                 c.Color = "\u001b[37m";
                 break;
             case "R":
-                c.Attack = rdAtk + 5;
-                c.HP = rdHp+10;
+                c.Attack = rdAtk + 50;
+                c.HP = rdHp+100;
                 c.Accuracy = rdAcc;
-                c.Dodge = 10 - rdAcc - 8;
-                c.Speed = rdSpeed+10;
+                c.Dodge = 100 - rdAcc - 80;
+                c.Speed = rdSpeed+100;
                 c.Color = "\u001b[34m";
                 break;
             case "E":
-                c.Attack = rdAtk + 10;
-                c.HP = rdHp+20;
-                c.Accuracy = rdAcc+1;
-                c.Dodge = 10 - rdAcc - 7;
-                c.Speed = rdSpeed+15;
+                c.Attack = rdAtk + 100;
+                c.HP = rdHp+200;
+                c.Accuracy = rdAcc+10;
+                c.Dodge = 100 - rdAcc - 70;
+                c.Speed = rdSpeed+150;
                 c.Color = "\u001b[31m";
                 break;
             default: //legendary
-                c.Attack = rdAtk + 15;
-                c.HP = rdHp+30;
-                c.Accuracy = rdAcc+2;
-                c.Dodge = 10 - rdAcc - 6;
-                c.Speed = rdSpeed+20;
+                c.Attack = rdAtk + 150;
+                c.HP = rdHp+300;
+                c.Accuracy = rdAcc+20;
+                c.Dodge = 100 - rdAcc - 60;
+                c.Speed = rdSpeed+200;
                 c.Color = "\u001b[36m";
                 break;
         }

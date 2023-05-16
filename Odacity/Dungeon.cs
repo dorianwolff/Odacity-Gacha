@@ -71,19 +71,24 @@ public class Dungeon
     
     public static void DisplayHighScores(List<Character> characterCollection)
     {
-        //TODO 
+        string floor = ""+towerStageClear;
+        if (floor.Length == 2)
+            floor += " ";
+        else if (floor.Length == 1)
+            floor = " "+floor+" ";
+        
         Console.WriteLine("/-------------------------------------------\\\n" +
                           "|                                           |\n" +
                           "|                 \u001b[36mHighScores\u001b[0m                |\n" +
-                          "|                                           |\n" +
-                          "|                                           |\n" +
-                          "|                                           |\n" +
+                          "|                                           |");
+        
+        Console.WriteLine("|          Current floor clear : "+floor+"            |\n" +
                           "|                                           |\n" +
                           "|                                           |\n" +
                           "\\-------------------------------------------/\n");
         Console.ReadKey();
         Enter(characterCollection);
-    } //TODO
+    }
 
     public static void EnterDungeon(List<Character> characterCollection)
     {

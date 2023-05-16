@@ -5,6 +5,7 @@ public class Combat
     public static int TurnCount;
     public static int Arrow; // 1, 2, 3 or 4;
     public static bool displayChars;
+    public static int damageTaken;
     public static void TowerFight(List<Character> characterCollection)
     {
         foreach (Character character in Dungeon.Team)
@@ -16,12 +17,13 @@ public class Combat
             character.IsStuned = false;
             character.buffedSpeed = character.Speed;
             character.buffedAtk = character.Attack;
-            character.buffedDodge = character.buffedDodge;
+            character.buffedDodge = character.Dodge;
             character.buffedAccuracy = character.Accuracy;
             character.IsBuffed = false;
             character.Skill1.CooldownLeft = 0;
             character.Skill2.CooldownLeft = 0;
             character.UltSkill.CooldownLeft = character.UltSkill.Cooldown;
+            character.nbTurnsBuffed = 0;
         }
         
 
@@ -36,11 +38,12 @@ public class Combat
             enemy.IsStuned = false;
             enemy.buffedSpeed = enemy.Speed;
             enemy.buffedAtk = enemy.Attack;
-            enemy.buffedDodge = enemy.buffedDodge;
+            enemy.buffedDodge = enemy.Dodge;
             enemy.buffedAccuracy = enemy.Accuracy;
             enemy.IsBuffed = false;
             enemy.Skill1.CooldownLeft = 0;
             enemy.UltSkill.CooldownLeft = enemy.UltSkill.Cooldown;
+            enemy.nbTurnsBuffed = 0;
         }
 
         displayChars = true;
@@ -187,6 +190,20 @@ public class Combat
             Console.WriteLine("The enemy is poisoned. It loses "+enemy.HP/20+ "HP.");
             enemy.IsPoisonned = false;
             enemy.HP-=(enemy.HP/20);
+        }
+
+        if (enemy.IsBuffed)
+        {
+            enemy.nbTurnsBuffed -= 1;
+            if (enemy.nbTurnsBuffed == 0)
+                enemy.IsBuffed = false;
+            if (enemy.IsBuffed == false)
+            {
+                enemy.buffedAccuracy = enemy.Accuracy;
+                enemy.buffedAtk = enemy.Attack;
+                enemy.buffedDodge = enemy.Dodge;
+                enemy.buffedSpeed = enemy.Speed;
+            }
         }
         Character characterTargeted = Dungeon.Team[0];
         foreach (Character character in Dungeon.Team) //Choose character to attack
@@ -486,6 +503,7 @@ public class Combat
     public static void DisplayCharacterTurn(Character character,List<Character> characterCollection)
     {
         Console.Clear();
+        
         string isActive1 = "\u001b[0m";
         string isActive2 = "\u001b[0m";
         string isActive3 = "\u001b[0m";
@@ -495,6 +513,26 @@ public class Combat
         string characterBuffsAndDebuffs2 = "  ";
         string characterBuffsAndDebuffs3 = "  ";
         string characterBuffsAndDebuffs4 = "  ";
+
+        foreach (Character ca in Dungeon.Team)
+        {
+            if (ca.HP <= 0)
+            {
+                ca.IsAlive = false;
+                ca.HP = 0;
+            }
+        }
+
+        foreach (Enemies enem in Enemies.towerEnemies)
+        {
+            if (enem.HP <= 0)
+            {
+                enem.IsAlive = false;
+                enem.HP = 0;
+            }
+        }
+        
+        
         
         string sc1 =CalculateCubes(Dungeon.Team[0].MaxHP,Dungeon.Team[0].HP,false);
         if (character == Dungeon.Team[0])
@@ -601,16 +639,16 @@ public class Combat
                 enemyBuffsAndDebuffs4 += "\u001b[33m꩜"+ "\u001b[0m";
         }
         
-        se1 = InsertsSpaces(se1,23);
-        se2 = InsertsSpaces(se2,23);
-        se3 = InsertsSpaces(se3,23);
-        se4 = InsertsSpaces(se4,23);
+        se1 = InsertsSpaces(se1,30);
+        se2 = InsertsSpaces(se2,30);
+        se3 = InsertsSpaces(se3,30);
+        se4 = InsertsSpaces(se4,30);
         
 
-        enemyBuffsAndDebuffs1 = InsertsSpaces(enemyBuffsAndDebuffs1, 23);
-        enemyBuffsAndDebuffs2 = InsertsSpaces(enemyBuffsAndDebuffs2, 23);
-        enemyBuffsAndDebuffs3 = InsertsSpaces(enemyBuffsAndDebuffs3, 23);
-        enemyBuffsAndDebuffs4 = InsertsSpaces(enemyBuffsAndDebuffs4, 23);
+        enemyBuffsAndDebuffs1 = InsertsSpaces(enemyBuffsAndDebuffs1, 30);
+        enemyBuffsAndDebuffs2 = InsertsSpaces(enemyBuffsAndDebuffs2, 30);
+        enemyBuffsAndDebuffs3 = InsertsSpaces(enemyBuffsAndDebuffs3, 30);
+        enemyBuffsAndDebuffs4 = InsertsSpaces(enemyBuffsAndDebuffs4, 30);
         
         se1 +="|";
         se2 +="|";
@@ -655,8 +693,8 @@ public class Combat
             DisplayEnemyInfo(Enemies.towerEnemies[Arrow-1]);
         }
         Console.WriteLine("|                                                                       |\n" +
-                          "|\u001b[31m[<-]\u001b[0m                            \u001b[34mBack(b)\u001b[0m" +
-                          "                            \u001b[31m[->]\u001b[0m|\n" +
+                          "|\u001b[31m[<-]\u001b[0m                \u001b[34mBack(b)\u001b[0m" +
+                          "                \u001b[36mStats(s)\u001b[0m                \u001b[31m[->]\u001b[0m|\n" +
                           "|                                                                       |\n" +
                           "\\-----------------------------------------------------------------------/\n");
 
@@ -670,8 +708,12 @@ public class Combat
                     characterBis.IsAlive = false;
                 }
                 break;
+            case ConsoleKey.S:
+                DisplayStats(character,characterCollection);
+                DisplayCharacterTurn(character, characterCollection);
+                break;
             case ConsoleKey.Q:
-                if (character.Skill1.CooldownLeft == 0)
+                if (character.Skill1.CooldownLeft == 0 && Enemies.towerEnemies[Arrow-1].IsAlive)
                 {
                     DoesCharacterCooldown(character);
                     character.Skill1.CooldownLeft = character.Skill1.Cooldown;
@@ -683,7 +725,7 @@ public class Combat
                 }
                 break;
             case ConsoleKey.W:
-                if (character.Skill2.CooldownLeft == 0)
+                if (character.Skill2.CooldownLeft == 0 && Enemies.towerEnemies[Arrow-1].IsAlive)
                 {
                     DoesCharacterCooldown(character);
                     character.Skill2.CooldownLeft = character.Skill2.Cooldown;
@@ -695,7 +737,7 @@ public class Combat
                 }
                 break;
             case ConsoleKey.R:
-                if (character.UltSkill.CooldownLeft == 0)
+                if (character.UltSkill.CooldownLeft == 0 && Enemies.towerEnemies[Arrow-1].IsAlive)
                 {
                     DoesCharacterCooldown(character);
                     character.UltSkill.CooldownLeft = character.UltSkill.Cooldown;
@@ -746,7 +788,23 @@ public class Combat
                 DisplayCharacterTurn(character, characterCollection);
                 break;
         }
-        
+        foreach (Character ca in Dungeon.Team)
+        {
+            if (ca.HP <= 0)
+            {
+                ca.IsAlive = false;
+                ca.HP = 0;
+            }
+        }
+
+        foreach (Enemies enem in Enemies.towerEnemies)
+        {
+            if (enem.HP <= 0)
+            {
+                enem.IsAlive = false;
+                enem.HP = 0;
+            }
+        }
         Console.Clear();
         isActive1 = "\u001b[0m";
         isActive2 = "\u001b[0m";
@@ -863,16 +921,16 @@ public class Combat
                 enemyBuffsAndDebuffs4 += "\u001b[33m꩜"+ "\u001b[0m";
         }
         
-        se1 = InsertsSpaces(se1,23);
-        se2 = InsertsSpaces(se2,23);
-        se3 = InsertsSpaces(se3,23);
-        se4 = InsertsSpaces(se4,23);
+        se1 = InsertsSpaces(se1,30);
+        se2 = InsertsSpaces(se2,30);
+        se3 = InsertsSpaces(se3,30);
+        se4 = InsertsSpaces(se4,30);
         
 
-        enemyBuffsAndDebuffs1 = InsertsSpaces(enemyBuffsAndDebuffs1, 23);
-        enemyBuffsAndDebuffs2 = InsertsSpaces(enemyBuffsAndDebuffs2, 23);
-        enemyBuffsAndDebuffs3 = InsertsSpaces(enemyBuffsAndDebuffs3, 23);
-        enemyBuffsAndDebuffs4 = InsertsSpaces(enemyBuffsAndDebuffs4, 23);
+        enemyBuffsAndDebuffs1 = InsertsSpaces(enemyBuffsAndDebuffs1, 30);
+        enemyBuffsAndDebuffs2 = InsertsSpaces(enemyBuffsAndDebuffs2, 30);
+        enemyBuffsAndDebuffs3 = InsertsSpaces(enemyBuffsAndDebuffs3, 30);
+        enemyBuffsAndDebuffs4 = InsertsSpaces(enemyBuffsAndDebuffs4, 30);
         
         se1 +="|";
         se2 +="|";
@@ -917,11 +975,76 @@ public class Combat
             DisplayEnemyInfo(Enemies.towerEnemies[Arrow-1]);
         }
         Console.WriteLine("|                                                                       |\n" +
-                          "|\u001b[31m[<-]\u001b[0m                            \u001b[34mBack(b)\u001b[0m" +
-                          "                            \u001b[31m[->]\u001b[0m|\n" +
+                          "|\u001b[31m[<-]\u001b[0m                \u001b[34mBack(b)\u001b[0m" +
+                          "                \u001b[36mStats(s)\u001b[0m                \u001b[31m[->]\u001b[0m|\n" +
                           "|                                                                       |\n" +
                           "\\-----------------------------------------------------------------------/\n");
         StartFight(characterCollection);
+    }
+
+    public static void DisplayStats(Character character, List<Character> characterCollection)
+    {
+        Console.Clear();
+
+        Console.WriteLine("/-------------------------------------------\\\n" +
+                          "|            \u001b[35mCharacter Details\u001b[0m              |\n" +
+                          "|                                           |\n" +
+                          $"|Rarity : ({character.Color}{character.Grade}\u001b[0m)                               |");
+        string s = $"|Name :{character.Name}";
+        while (s.Length<44)
+        {
+            s += " ";
+        }
+        Console.WriteLine(s+"|");
+        string z = $"|Nickname : {character.Nickname}";
+        while (z.Length<44)
+        {
+            z += " ";
+        }
+        Console.WriteLine(z+"|");
+        string lev = $"|Level : \u001b[31m{character.Level}\u001b[0m      Exp : {character.Experience}/{character.MaxExperience}" +
+                     $"       AWAKEN : \u001b[35m{character.awakening}\u001b[0m";
+        while (lev.Length<62)
+        {
+            lev += " ";
+        }
+        Console.WriteLine(lev+"|");
+        Console.WriteLine("|                                           |\n"
+                          +"|             \u001b[34mCharacter Stats\u001b[0m               |");
+        string y = $"|Attack : {character.Attack} \u001b[34m(+{character.buffedAtk-character.Attack})\u001b[0m";
+        while (y.Length<44)
+        {
+            y += " ";
+        }
+        Console.WriteLine(y+"|");
+        string w = $"|HP : {character.HP}/{character.MaxHP} ";
+        while (w.Length<44)
+        {
+            w += " ";
+        }
+        Console.WriteLine(w+"|");
+        string x = $"|Speed : {character.Speed} \u001b[34m(+{character.buffedSpeed-character.Speed})\u001b[0m";
+        while (x.Length<44)
+        {
+            x += " ";
+        }
+        Console.WriteLine(x+"|");
+        string v = $"|Dodge : {character.Dodge} \u001b[34m(+{character.buffedDodge-character.Dodge})\u001b[0m";
+        while (v.Length<44)
+        {
+            v += " ";
+        }
+        Console.WriteLine(v+"|");
+        string u = $"|Accuracy : {character.Accuracy} \u001b[34m(+{character.buffedAccuracy-character.Accuracy})\u001b[0m";
+        while (u.Length<44)
+        {
+            u += " ";
+        }
+        Console.WriteLine(u+"|");
+        Console.WriteLine("|                                           |\n" +
+                          "\\-------------------------------------------/\n");
+
+        Console.ReadKey();
     }
 
     public static void DoesCharacterCooldown(Character character)
@@ -944,13 +1067,26 @@ public class Combat
 
     public static void AttackEnemy(Enemies enemies, Character character, int skill, List<Character> characterCollection)
     {
-
+        
         Random rd = new Random();
         int dodgeLuck = rd.Next(1, 11);
         Random rdv = new Random();
         int accuracyLuck = rdv.Next(1, 11);
         dodgeLuck += enemies.buffedDodge;
         accuracyLuck += character.buffedAccuracy;
+        if (character.IsBuffed)
+        {
+            character.nbTurnsBuffed -= 1;
+            if (character.nbTurnsBuffed == 0)
+                character.IsBuffed = false;
+            if (character.IsBuffed == false)
+            {
+                character.buffedAccuracy = character.Accuracy;
+                character.buffedAtk = character.Attack;
+                character.buffedDodge = character.Dodge;
+                character.buffedSpeed = character.Speed;
+            }
+        }
         if (character.IsStuned)
         {
             Console.WriteLine(character.Name+" is \u001b[32mstunned\u001b[0m. It cannot attack until next turn.");
@@ -1016,6 +1152,7 @@ public class Combat
                                           "\u001b[0m% of "+character.Skill1.BuffEffect+" and has dealt \u001b[31m"+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
                                           "\u001b[0m damage to \u001b[35m" + enemies.Name+"\u001b[0m!");
                         enemies.HP -= character.buffedAtk * character.Skill1.AttackMultiplier / 100;
+                        character.nbTurnsBuffed = 2;
                     }
                     else
                     {
@@ -1025,6 +1162,7 @@ public class Combat
                             {
                                 charac.buffedDodge +=charac.buffedDodge*charac.Skill1.buffPercentage/100;
                                 charac.IsBuffed = true;
+                                charac.nbTurnsBuffed = 2;
                             }
 
                         }
@@ -1034,6 +1172,7 @@ public class Combat
                             {
                                 charac.buffedSpeed +=charac.buffedSpeed*charac.Skill1.buffPercentage/100;
                                 charac.IsBuffed = true;
+                                charac.nbTurnsBuffed = 2;
                             }
                         }
                         else if (character.Skill1.BuffEffect == "atk")
@@ -1042,6 +1181,7 @@ public class Combat
                             {
                                 charac.buffedAtk +=charac.buffedAtk*charac.Skill1.buffPercentage/100;
                                 charac.IsBuffed = true;
+                                charac.nbTurnsBuffed = 2;
                             }
                         }
                         else //Accuracy
@@ -1050,6 +1190,7 @@ public class Combat
                             {
                                 charac.buffedAccuracy +=charac.buffedAccuracy*charac.Skill1.buffPercentage/100;
                                 charac.IsBuffed = true;
+                                charac.nbTurnsBuffed = 2;
                             }
                         }
                         foreach (Enemies enemy in Enemies.towerEnemies) //AOE
@@ -1075,7 +1216,7 @@ public class Combat
                             enemies.IsPoisonned = true;
                         }
                         enemies.HP -= character.buffedAtk * character.Skill1.AttackMultiplier / 100;
-                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has inflicted \u001b[32m"+character.Skill1.DebuffEffect+" on "+
+                        Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has inflicted \u001b[32m"+character.Skill1.DebuffEffect+"\u001b[0m on "+
                                           enemies.Name+"\u001b[0m and has dealt \u001b[31m"+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
                                           "\u001b[0m damage!");
                     }
@@ -1145,6 +1286,7 @@ public class Combat
                         Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has buffed himself by \u001b[34m"+character.Skill2.buffPercentage+
                                           "\u001b[0m% of "+character.Skill2.BuffEffect+" and has dealt \u001b[31m"+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
                                           "\u001b[0m damage to \u001b[35m" + enemies.Name+"\u001b[0m!");
+                        character.nbTurnsBuffed = 2;
                     }
                     else
                     {
@@ -1154,6 +1296,7 @@ public class Combat
                             {
                                 charac.IsBuffed = true;
                                 charac.buffedDodge +=charac.buffedDodge*charac.Skill2.buffPercentage/100;
+                                charac.nbTurnsBuffed = 2;
                             }
 
                         }
@@ -1163,6 +1306,7 @@ public class Combat
                             {
                                 charac.IsBuffed = true;
                                 charac.buffedSpeed +=charac.buffedSpeed*charac.Skill2.buffPercentage/100;
+                                charac.nbTurnsBuffed = 2;
                             }
                         }
                         else if (character.Skill2.BuffEffect == "atk")
@@ -1171,6 +1315,7 @@ public class Combat
                             {
                                 charac.IsBuffed = true;
                                 charac.buffedAtk +=charac.buffedAtk*charac.Skill2.buffPercentage/100;
+                                charac.nbTurnsBuffed = 2;
                             }
                         }
                         else //Accuracy
@@ -1179,6 +1324,7 @@ public class Combat
                             {
                                 charac.IsBuffed = true;
                                 charac.buffedAccuracy +=charac.buffedAccuracy*charac.Skill2.buffPercentage/100;
+                                charac.nbTurnsBuffed = 2;
                             }
                         }
                         foreach (Enemies enemy in Enemies.towerEnemies) //AOE
@@ -1273,6 +1419,7 @@ public class Combat
                         Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m has buffed himself by \u001b[34m"+character.UltSkill.buffPercentage+
                                           "\u001b[0m% of "+character.UltSkill.BuffEffect+" and has dealt \u001b[31m"+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
                                           "\u001b[0m damage to \u001b[35m" + enemies.Name+"\u001b[0m!");
+                        character.nbTurnsBuffed = 2;
                     }
                     else
                     {
@@ -1282,6 +1429,7 @@ public class Combat
                             {
                                 charac.IsBuffed = true;
                                 charac.buffedDodge +=charac.buffedDodge*charac.UltSkill.buffPercentage/100;
+                                charac.nbTurnsBuffed = 2;
                             }
 
                         }
@@ -1291,6 +1439,7 @@ public class Combat
                             {
                                 charac.IsBuffed = true;
                                 charac.buffedSpeed +=charac.buffedSpeed*charac.UltSkill.buffPercentage/100;
+                                charac.nbTurnsBuffed = 2;
                             }
                         }
                         else if (character.UltSkill.BuffEffect == "atk")
@@ -1299,6 +1448,7 @@ public class Combat
                             {
                                 charac.IsBuffed = true;
                                 charac.buffedAtk +=charac.buffedAtk*charac.UltSkill.buffPercentage/100;
+                                charac.nbTurnsBuffed = 2;
                             }
                             
                         }
@@ -1308,6 +1458,7 @@ public class Combat
                             {
                                 charac.IsBuffed = true;
                                 charac.buffedAccuracy +=charac.buffedAccuracy*charac.UltSkill.buffPercentage/100;
+                                charac.nbTurnsBuffed = 2;
                             }
                         }
                         foreach (Enemies enemy in Enemies.towerEnemies) //AOE
