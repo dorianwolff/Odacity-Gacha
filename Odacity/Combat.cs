@@ -211,7 +211,9 @@ public class Combat
         int accuracyLuck = rdv.Next(1, 11);
         dodgeLuck += characterTargeted.buffedDodge;
         accuracyLuck += enemy.buffedAccuracy;
-        if (enemy.UltSkill.CooldownLeft == 0) //Ult skill
+        if (!enemy.IsStuned)
+        {
+            if (enemy.UltSkill.CooldownLeft == 0) //Ult skill
         {
             DoesEnemyCooldown();
             enemy.UltSkill.CooldownLeft = enemy.UltSkill.Cooldown;
@@ -478,6 +480,7 @@ public class Combat
                 }
             }
             Console.ReadKey();
+        }
         }
     }
 
@@ -801,20 +804,26 @@ public class Combat
             Console.WriteLine("The enemy \u001b[31mdodged\u001b[0m!");
             Console.ReadKey();
         }
-        else
+        else if (!character.IsStuned)
         {
             if (skill == 1) // Skill 1 
             {
                 if (character.Skill1.BuffEffect == "" && character.Skill1.DebuffEffect == "") //NORMAL ATK
                 {
                     if (character.Skill1.isSingleTarget) //SGT
-                        enemies.HP -= character.buffedAtk*character.Skill1.AttackMultiplier/100;
+                    {
+                        enemies.HP -= character.buffedAtk * character.Skill1.AttackMultiplier / 100;
+                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
+                                          " damage to "+enemies.Name+"!");
+                    }
                     else
                     {
                         foreach (Enemies enemy in Enemies.towerEnemies) //AOE
                         {
                             enemy.HP -= character.buffedAtk*character.Skill1.AttackMultiplier/100;
                         }
+                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
+                                          " damage to all enemies!");
                     }
                     
                 }
@@ -840,6 +849,9 @@ public class Combat
                         {
                             character.buffedAccuracy +=character.buffedAccuracy*character.Skill1.buffPercentage/100;
                         }
+                        Console.WriteLine(character.Name+" has buffed himself by "+character.Skill1.buffPercentage+
+                                          "% of "+character.Skill1.BuffEffect+" and has dealt "+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
+                                          " damage to " + enemies.Name+"!");
                         enemies.HP -= character.buffedAtk * character.Skill1.AttackMultiplier / 100;
                     }
                     else
@@ -881,6 +893,9 @@ public class Combat
                         {
                             enemy.HP -= character.buffedAtk*character.Skill1.AttackMultiplier/100;
                         }
+                        Console.WriteLine(character.Name+" has buffed your team by "+character.Skill1.buffPercentage+
+                                          "% of "+character.Skill1.BuffEffect+" and has dealt "+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
+                                          " damage to all enemies!");
                     }
                     
                 }
@@ -897,6 +912,9 @@ public class Combat
                             enemies.IsPoisonned = true;
                         }
                         enemies.HP -= character.buffedAtk * character.Skill1.AttackMultiplier / 100;
+                        Console.WriteLine(character.Name+" has inflicted "+character.Skill1.DebuffEffect+" on "+
+                                          enemies.Name+" and has dealt "+character.buffedAtk * character.Skill1.AttackMultiplier / 100+
+                                          " damage!");
                     }
                     else
                     {
@@ -912,6 +930,8 @@ public class Combat
                             }
                             enemy.HP -= character.buffedAtk*character.Skill1.AttackMultiplier/100;
                         }
+                        Console.WriteLine(character.Name+" has inflicted "+character.Skill1.DebuffEffect+" on all enemies and has dealt "
+                                          +character.buffedAtk * character.Skill1.AttackMultiplier / 100+ " damage!");
                     }
                 }
             }
@@ -920,13 +940,19 @@ public class Combat
                 if (character.Skill2.BuffEffect == "" && character.Skill2.DebuffEffect == "") //NORMAL ATK
                 {
                     if (character.Skill2.isSingleTarget) //SGT
-                        enemies.HP -= character.buffedAtk*character.Skill2.AttackMultiplier/100;
+                    {
+                        enemies.HP -= character.buffedAtk * character.Skill2.AttackMultiplier / 100;
+                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
+                                          " damage to "+enemies.Name+"!");
+                    }
                     else
                     {
                         foreach (Enemies enemy in Enemies.towerEnemies) //AOE
                         {
                             enemy.HP -= character.buffedAtk*character.Skill2.AttackMultiplier/100;
                         }
+                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
+                                          " damage to all enemies!");
                     }
                     
                 }
@@ -953,6 +979,9 @@ public class Combat
                             character.buffedAccuracy +=character.buffedAccuracy*character.Skill2.buffPercentage/100;
                         }
                         enemies.HP -= character.buffedAtk * character.Skill2.AttackMultiplier / 100;
+                        Console.WriteLine(character.Name+" has buffed himself by "+character.Skill2.buffPercentage+
+                                          "% of "+character.Skill2.BuffEffect+" and has dealt "+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
+                                          " damage to " + enemies.Name+"!");
                     }
                     else
                     {
@@ -993,6 +1022,9 @@ public class Combat
                         {
                             enemy.HP -= character.buffedAtk*character.Skill2.AttackMultiplier/100;
                         }
+                        Console.WriteLine(character.Name+" has buffed your team by "+character.Skill2.buffPercentage+
+                                          "% of "+character.Skill2.BuffEffect+" and has dealt "+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
+                                          " damage to all enemies!");
                     }
                     
                 }
@@ -1009,6 +1041,9 @@ public class Combat
                             enemies.IsPoisonned = true;
                         }
                         enemies.HP -= character.buffedAtk * character.Skill2.AttackMultiplier / 100;
+                        Console.WriteLine(character.Name+" has inflicted "+character.Skill2.DebuffEffect+" on "+
+                                          enemies.Name+" and has dealt "+character.buffedAtk * character.Skill2.AttackMultiplier / 100+
+                                          " damage!");
                     }
                     else
                     {
@@ -1024,6 +1059,8 @@ public class Combat
                             }
                             enemy.HP -= character.buffedAtk*character.Skill2.AttackMultiplier/100;
                         }
+                        Console.WriteLine(character.Name+" has inflicted "+character.Skill2.DebuffEffect+" on all enemies and has dealt "
+                                          +character.buffedAtk * character.Skill2.AttackMultiplier / 100+ " damage!");
                     }
                 }
             }
@@ -1032,13 +1069,19 @@ public class Combat
                 if (character.UltSkill.BuffEffect == "" && character.UltSkill.DebuffEffect == "")
                 {
                     if (character.UltSkill.isSingleTarget) //SGT
-                        enemies.HP -= character.buffedAtk*character.UltSkill.AttackMultiplier/100;
+                    {
+                        enemies.HP -= character.buffedAtk * character.UltSkill.AttackMultiplier / 100;
+                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
+                                          " damage to "+enemies.Name+"!");
+                    }
                     else
                     {
                         foreach (Enemies enemy in Enemies.towerEnemies)
                         {
                             enemy.HP -= character.buffedAtk*character.UltSkill.AttackMultiplier/100;
                         }
+                        Console.WriteLine(character.Name+" has dealt "+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
+                                          " damage to all enemies!");
                     }
                 }
                 else if (character.UltSkill.DebuffEffect == "") //BUFF
@@ -1064,6 +1107,9 @@ public class Combat
                             character.buffedAccuracy +=character.buffedAccuracy*character.UltSkill.buffPercentage/100;
                         }
                         enemies.HP -= character.buffedAtk * character.UltSkill.AttackMultiplier / 100;
+                        Console.WriteLine(character.Name+" has buffed himself by "+character.UltSkill.buffPercentage+
+                                          "% of "+character.UltSkill.BuffEffect+" and has dealt "+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
+                                          " damage to " + enemies.Name+"!");
                     }
                     else
                     {
@@ -1091,6 +1137,7 @@ public class Combat
                                 charac.IsBuffed = true;
                                 charac.buffedAtk +=charac.buffedAtk*charac.UltSkill.buffPercentage/100;
                             }
+                            
                         }
                         else //Accuracy
                         {
@@ -1104,6 +1151,9 @@ public class Combat
                         {
                             enemy.HP -= character.buffedAtk*character.UltSkill.AttackMultiplier/100;
                         }
+                        Console.WriteLine(character.Name+" has buffed your team by "+character.UltSkill.buffPercentage+
+                                          "% of "+character.UltSkill.BuffEffect+" and has dealt "+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
+                                          " damage to all enemies!");
                     }
                     
                 }
@@ -1120,6 +1170,9 @@ public class Combat
                             enemies.IsPoisonned = true;
                         }
                         enemies.HP -= character.buffedAtk * character.UltSkill.AttackMultiplier / 100;
+                        Console.WriteLine(character.Name+" has inflicted "+character.UltSkill.DebuffEffect+" on "+
+                                          enemies.Name+" and has dealt "+character.buffedAtk * character.UltSkill.AttackMultiplier / 100+
+                                          " damage!");
                     }
                     else
                     {
@@ -1135,11 +1188,15 @@ public class Combat
                             }
                             enemy.HP -= character.buffedAtk*character.UltSkill.AttackMultiplier/100;
                         }
+                        Console.WriteLine(character.Name+" has inflicted "+character.UltSkill.DebuffEffect+" on all enemies and has dealt "
+                                          +character.buffedAtk * character.UltSkill.AttackMultiplier / 100+ " damage!");
                     }
                 }
             }
 
         }
+
+        Console.ReadKey();
     }
 
     public static void DisplayEnemyInfo(Enemies enemies)
