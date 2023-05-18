@@ -1965,15 +1965,35 @@ public class Combat
         string redCubes = "\u001b[31m";
         if (isEnemy)
             greenCubes = "\u001b[35m";
-        for (int i = 0; i <hp*10; i+=variable)
+        if (hp == 0)
         {
-            greenCubes += "█";
+            for (int i = 0; i <10; i+=1)
+            {
+                redCubes += "█";
+            }
+            return redCubes + "\u001b[0m";
         }
-        for (int i = hp*10; i <maxHp*10; i+=variable)
+        else if (hp == maxHp)
         {
-            redCubes += "█";
+            for (int i = 0; i <10; i+=1)
+            {
+                greenCubes += "█";
+            }
+
+            return greenCubes + "\u001b[0m";
         }
-        return greenCubes+"\u001b[0m"+redCubes+"\u001b[0m";
+        else
+        {
+            for (int i = 0; i <hp*9; i+=variable)
+            {
+                greenCubes += "█";
+            }
+            for (int i = hp*9; i <maxHp*9; i+=variable)
+            {
+                redCubes += "█";
+            }
+            return greenCubes+"\u001b[0m"+redCubes+"\u001b[0m";
+        }
     }
 
     public static void UpdateTurnPriority()
