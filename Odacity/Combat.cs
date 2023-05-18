@@ -182,8 +182,212 @@ public class Combat
 
     public static void DisplayEnemyTurn(Enemies enemy)
     {
+        Character characterTargeted = Dungeon.Team[0];
+        foreach (Character character in Dungeon.Team)
+        {
+            if (character.IsAlive && character.HP < characterTargeted.HP)
+                characterTargeted = character;
+        }
+        if (ADeadTeam())
+            return;
+        Console.Clear();
         Console.WriteLine();
         Console.WriteLine("\u001b[31mEnemy\u001b[0m turn");
+        
+        string isActive1 = "\u001b[0m";
+        string isActive2 = "\u001b[0m";
+        string isActive3 = "\u001b[0m";
+
+        string characterBuffsAndDebuffs1 = "  ";
+        string characterBuffsAndDebuffs2 = "  ";
+        string characterBuffsAndDebuffs3 = "  ";
+        string characterBuffsAndDebuffs4 = "  ";
+        
+        string sc1 =CalculateCubes(Dungeon.Team[0].MaxHP,Dungeon.Team[0].HP,false);
+        if ( characterTargeted == Dungeon.Team[0])
+        {
+            isActive1 = "\u001b[33m";
+            if (!Dungeon.Team[0].IsAlive)
+                isActive1 = "\u001b[31m";
+            if (Dungeon.Team[0].IsBuffed)
+                characterBuffsAndDebuffs1 +="\u001b[34m⚔\u001b[0m ";
+            if (Dungeon.Team[0].IsPoisonned)
+                characterBuffsAndDebuffs1 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Dungeon.Team[0].IsStuned)
+                characterBuffsAndDebuffs1 += "\u001b[33m꩜"+ "\u001b[0m";
+
+        }
+        string sc2="";
+        if (Dungeon.Team.Count>1)
+        {
+            sc2 = CalculateCubes(Dungeon.Team[1].MaxHP, Dungeon.Team[1].HP,false);
+            if (characterTargeted == Dungeon.Team[1])
+                isActive2 = "\u001b[33m";
+            if (!Dungeon.Team[1].IsAlive)
+                isActive2 = "\u001b[31m";
+            sc2 += "   " + isActive2 + Dungeon.Team[1].Name + "\u001b[0m";
+            if (Dungeon.Team[1].IsBuffed)
+                characterBuffsAndDebuffs2 +="\u001b[34m⚔\u001b[0m ";
+            if (Dungeon.Team[1].IsPoisonned)
+                characterBuffsAndDebuffs2 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Dungeon.Team[1].IsStuned)
+                characterBuffsAndDebuffs2 += "\u001b[33m꩜"+ "\u001b[0m";
+        }
+        string sc3="";
+        if (Dungeon.Team.Count>2)
+        {
+            sc3 = CalculateCubes(Dungeon.Team[2].MaxHP, Dungeon.Team[2].HP,false);
+            if (characterTargeted == Dungeon.Team[2])
+                isActive3 = "\u001b[33m";
+            if (!Dungeon.Team[2].IsAlive)
+                isActive3 = "\u001b[31m";
+            sc3 += "   " + isActive3 + Dungeon.Team[2].Name + "\u001b[0m";
+            if (Dungeon.Team[2].IsBuffed)
+                characterBuffsAndDebuffs3 +="\u001b[34m⚔\u001b[0m ";
+            if (Dungeon.Team[2].IsPoisonned)
+                characterBuffsAndDebuffs3 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Dungeon.Team[2].IsStuned)
+                characterBuffsAndDebuffs3 += "\u001b[33m꩜"+ "\u001b[0m";
+        }
+        
+        string characterHealthAndNames1 = sc1+"   "+isActive1+$"{Dungeon.Team[0].Name}\u001b[0m";
+        string characterHealthAndNames2 = sc2+"\u001b[0m";
+        string characterHealthAndNames3 = sc3+"\u001b[0m";
+        characterHealthAndNames1 = InsertsSpaces(characterHealthAndNames1,40);
+        characterHealthAndNames2 = InsertsSpaces(characterHealthAndNames2,40);
+        characterHealthAndNames3 = InsertsSpaces(characterHealthAndNames3,40);
+        string characterHealthAndNames4 = InsertsSpaces("  ",40);
+
+        characterBuffsAndDebuffs1 = InsertsSpaces(characterBuffsAndDebuffs1, 40);
+        characterBuffsAndDebuffs2 = InsertsSpaces(characterBuffsAndDebuffs2, 40);
+        characterBuffsAndDebuffs3 = InsertsSpaces(characterBuffsAndDebuffs3, 40);
+        characterBuffsAndDebuffs4 = InsertsSpaces(characterBuffsAndDebuffs4, 40);
+
+        string enemyBuffsAndDebuffs1 = "  ";
+        string se1 =CalculateCubes(Enemies.towerEnemies[0].MaxHP,Enemies.towerEnemies[0].HP,true);
+        if (!Enemies.towerEnemies[0].IsAlive)
+            se1 += "   \u001b[31m" + Enemies.towerEnemies[0].Name+"\u001b[0m";
+        else if (Enemies.towerEnemies[0]==enemy) //active
+        {
+            se1 += "   \u001b[32m" + Enemies.towerEnemies[0].Name+"\u001b[0m";
+        }
+        else
+        {
+            se1 += "   " + Enemies.towerEnemies[0].Name;
+        }
+        if (Enemies.towerEnemies[0].IsBuffed)
+            enemyBuffsAndDebuffs1 +="\u001b[34m⚔\u001b[0m ";
+        if (Enemies.towerEnemies[0].IsPoisonned)
+            enemyBuffsAndDebuffs1 += "\u001b[32m☠"+ "\u001b[0m ";
+        if (Enemies.towerEnemies[0].IsStuned)
+            enemyBuffsAndDebuffs1 += "\u001b[33m꩜"+ "\u001b[0m";
+        string enemyBuffsAndDebuffs2 = "  ";
+        string enemyBuffsAndDebuffs3 = "  ";
+        string enemyBuffsAndDebuffs4 = "  ";
+        
+        string se2="";
+        if (Enemies.towerEnemies.Count>1)
+        {
+            se2 = CalculateCubes(Enemies.towerEnemies[1].MaxHP, Enemies.towerEnemies[1].HP,true);
+            if (!Enemies.towerEnemies[1].IsAlive)
+                se2 += "   \u001b[31m" + Enemies.towerEnemies[1].Name+"\u001b[0m";
+            else if (Enemies.towerEnemies[1]==enemy) //active
+            {
+                se2 += "   \u001b[32m" + Enemies.towerEnemies[1].Name+"\u001b[0m";
+            }
+            else
+            {
+                se2 += "   " + Enemies.towerEnemies[1].Name;
+            }
+            if (Enemies.towerEnemies[1].IsBuffed)
+                enemyBuffsAndDebuffs2 +="\u001b[34m⚔\u001b[0m ";
+            if (Enemies.towerEnemies[1].IsPoisonned)
+                enemyBuffsAndDebuffs2 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Enemies.towerEnemies[1].IsStuned)
+                enemyBuffsAndDebuffs2 += "\u001b[33m꩜"+ "\u001b[0m";
+            
+        }
+        string se3="";
+        if (Enemies.towerEnemies.Count>2)
+        {
+            se3 = CalculateCubes(Enemies.towerEnemies[2].MaxHP, Enemies.towerEnemies[2].HP,true);
+            if (!Enemies.towerEnemies[2].IsAlive)
+                se3 += "   \u001b[31m" + Enemies.towerEnemies[2].Name+"\u001b[0m";
+            else if (Enemies.towerEnemies[2]==enemy) //active
+            {
+                se3 += "   \u001b[32m" + Enemies.towerEnemies[2].Name+"\u001b[0m";
+            }
+            else
+            {
+                se3 += "   " + Enemies.towerEnemies[2].Name;
+            }
+            if (Enemies.towerEnemies[2].IsBuffed)
+                enemyBuffsAndDebuffs3 +="\u001b[34m⚔\u001b[0m ";
+            if (Enemies.towerEnemies[2].IsPoisonned)
+                enemyBuffsAndDebuffs3 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Enemies.towerEnemies[2].IsStuned)
+                enemyBuffsAndDebuffs3 += "\u001b[33m꩜"+ "\u001b[0m";
+        }
+        string se4="";
+        if (Enemies.towerEnemies.Count>3)
+        {
+            se4 = CalculateCubes(Enemies.towerEnemies[3].MaxHP, Enemies.towerEnemies[3].HP,true);
+            if (!Enemies.towerEnemies[3].IsAlive)
+                se4 += "   \u001b[31m" + Enemies.towerEnemies[3].Name+"\u001b[0m";
+            else if (Enemies.towerEnemies[3]==enemy) //active
+            {
+                se4 += "   \u001b[32m" + Enemies.towerEnemies[3].Name+"\u001b[0m";
+            }
+            else
+            {
+                se4 += "   " + Enemies.towerEnemies[3].Name;
+            }
+            if (Enemies.towerEnemies[3].IsBuffed)
+                enemyBuffsAndDebuffs4 +="\u001b[34m⚔\u001b[0m ";
+            if (Enemies.towerEnemies[3].IsPoisonned)
+                enemyBuffsAndDebuffs4 += "\u001b[32m☠"+ "\u001b[0m ";
+            if (Enemies.towerEnemies[3].IsStuned)
+                enemyBuffsAndDebuffs4 += "\u001b[33m꩜"+ "\u001b[0m";
+        }
+        
+        se1 = InsertsSpaces(se1,30);
+        se2 = InsertsSpaces(se2,30);
+        se3 = InsertsSpaces(se3,30);
+        se4 = InsertsSpaces(se4,30);
+        
+
+        enemyBuffsAndDebuffs1 = InsertsSpaces(enemyBuffsAndDebuffs1, 30);
+        enemyBuffsAndDebuffs2 = InsertsSpaces(enemyBuffsAndDebuffs2, 30);
+        enemyBuffsAndDebuffs3 = InsertsSpaces(enemyBuffsAndDebuffs3, 30);
+        enemyBuffsAndDebuffs4 = InsertsSpaces(enemyBuffsAndDebuffs4, 30);
+        
+        se1 +="|";
+        se2 +="|";
+        se3 +="|";
+        se4 +="|";
+
+
+        Console.WriteLine("\n" +
+                          "                         \u001b[31mCombat\u001b[0m - \u001b[36mTower Level "+Dungeon.towerStageClear+"\u001b[0m\n");
+        Console.WriteLine("/-----------------------------------------------------------------------\\");
+        Console.WriteLine("| "+characterHealthAndNames1+se1);
+        Console.WriteLine("| "+characterBuffsAndDebuffs1+enemyBuffsAndDebuffs1+"|");
+        
+        Console.WriteLine("| "+characterHealthAndNames2+se2);
+        Console.WriteLine("| "+characterBuffsAndDebuffs2+enemyBuffsAndDebuffs2+"|");
+        
+        Console.WriteLine("| "+characterHealthAndNames3+se3);
+        Console.WriteLine("| "+characterBuffsAndDebuffs3+enemyBuffsAndDebuffs3+"|");
+        
+        Console.WriteLine("| "+characterHealthAndNames4+se4);
+        Console.WriteLine("| "+characterBuffsAndDebuffs4+enemyBuffsAndDebuffs4+"|");
+        
+        DisplayEnemyInfo(enemy,enemy.UltSkill.Cooldown);
+        
+        Console.WriteLine("|                                                                       |\n" +
+                          "|                                                                       |\n" +
+                          "|                                                                       |\n" +
+                          "\\-----------------------------------------------------------------------/\n");
         
         if (enemy.IsPoisonned) //Check if poisonned
         {
@@ -205,15 +409,7 @@ public class Combat
                 enemy.buffedSpeed = enemy.Speed;
             }
         }
-        Character characterTargeted = Dungeon.Team[0];
-        foreach (Character character in Dungeon.Team) //Choose character to attack
-        {
-            if (character.IsAlive)
-            {
-                characterTargeted = character;
-                break;
-            }
-        }
+        
         Random rd = new Random();
         int dodgeLuck = rd.Next(1, 11);
         Random rdv = new Random();
@@ -229,14 +425,14 @@ public class Combat
         {
             Console.WriteLine();
             if (enemy.UltSkill.CooldownLeft == 0) //Ult skill
-        {
-            DoesEnemyCooldown(enemy);
-            enemy.UltSkill.CooldownLeft = enemy.UltSkill.Cooldown;
-            if (dodgeLuck > accuracyLuck)
+            {
+                DoesEnemyCooldown(enemy);
+                enemy.UltSkill.CooldownLeft = enemy.UltSkill.Cooldown;
+                if (dodgeLuck > accuracyLuck)
             {
                 Console.WriteLine("\u001b[33m"+characterTargeted.Name+"\u001b[0m has \u001b[31mdodged\u001b[0m \u001b[35m"+enemy.Name+"\u001b[0m's ultimate attack!");
             }
-            else
+                else
             {
                 if (enemy.UltSkill.BuffEffect == "" && enemy.UltSkill.DebuffEffect == "") //Normal attack
                 {
@@ -360,8 +556,8 @@ public class Combat
                     }
                 }
             }
-        }
-        else
+            }
+            else
         {
             DoesEnemyCooldown(enemy);
             enemy.UltSkill.CooldownLeft = enemy.UltSkill.Cooldown;
@@ -497,6 +693,7 @@ public class Combat
             }
         }
         }
+        
         Console.ReadKey();
     }
 
@@ -531,13 +728,16 @@ public class Combat
                 enem.HP = 0;
             }
         }
-        
+        if (ADeadTeam())
+            return;
         
         
         string sc1 =CalculateCubes(Dungeon.Team[0].MaxHP,Dungeon.Team[0].HP,false);
         if (character == Dungeon.Team[0])
         {
             isActive1 = "\u001b[33m";
+            if (!Dungeon.Team[0].IsAlive)
+                isActive1 = "\u001b[31m";
             if (Dungeon.Team[0].IsBuffed)
                 characterBuffsAndDebuffs1 +="\u001b[34m⚔\u001b[0m ";
             if (Dungeon.Team[0].IsPoisonned)
@@ -552,6 +752,8 @@ public class Combat
             sc2 = CalculateCubes(Dungeon.Team[1].MaxHP, Dungeon.Team[1].HP,false);
             if (character == Dungeon.Team[1])
                 isActive2 = "\u001b[33m";
+            if (!Dungeon.Team[1].IsAlive)
+                isActive2 = "\u001b[31m";
             sc2 += "   " + isActive2 + Dungeon.Team[1].Name + "\u001b[0m";
             if (Dungeon.Team[1].IsBuffed)
                 characterBuffsAndDebuffs2 +="\u001b[34m⚔\u001b[0m ";
@@ -566,6 +768,8 @@ public class Combat
             sc3 = CalculateCubes(Dungeon.Team[2].MaxHP, Dungeon.Team[2].HP,false);
             if (character == Dungeon.Team[2])
                 isActive3 = "\u001b[33m";
+            if (!Dungeon.Team[2].IsAlive)
+                isActive3 = "\u001b[31m";
             sc3 += "   " + isActive3 + Dungeon.Team[2].Name + "\u001b[0m";
             if (Dungeon.Team[2].IsBuffed)
                 characterBuffsAndDebuffs3 +="\u001b[34m⚔\u001b[0m ";
@@ -590,7 +794,12 @@ public class Combat
 
         string enemyBuffsAndDebuffs1 = "  ";
         string se1 =CalculateCubes(Enemies.towerEnemies[0].MaxHP,Enemies.towerEnemies[0].HP,true);
-        se1 += "   " + Enemies.towerEnemies[0].Name;
+        if (!Enemies.towerEnemies[0].IsAlive)
+            se1 += "   \u001b[31m" + Enemies.towerEnemies[0].Name+"\u001b[0m";
+        else
+        {
+            se1 += "   " + Enemies.towerEnemies[0].Name;
+        }
         if (Enemies.towerEnemies[0].IsBuffed)
             enemyBuffsAndDebuffs1 +="\u001b[34m⚔\u001b[0m ";
         if (Enemies.towerEnemies[0].IsPoisonned)
@@ -605,7 +814,12 @@ public class Combat
         if (Enemies.towerEnemies.Count>1)
         {
             se2 = CalculateCubes(Enemies.towerEnemies[1].MaxHP, Enemies.towerEnemies[1].HP,true);
-            se2 += "   " + Enemies.towerEnemies[1].Name;
+            if (!Enemies.towerEnemies[1].IsAlive)
+                se2 += "   \u001b[31m" + Enemies.towerEnemies[1].Name+"\u001b[0m";
+            else
+            {
+                se2 += "   " + Enemies.towerEnemies[1].Name;
+            }
             if (Enemies.towerEnemies[1].IsBuffed)
                 enemyBuffsAndDebuffs2 +="\u001b[34m⚔\u001b[0m ";
             if (Enemies.towerEnemies[1].IsPoisonned)
@@ -618,7 +832,12 @@ public class Combat
         if (Enemies.towerEnemies.Count>2)
         {
             se3 = CalculateCubes(Enemies.towerEnemies[2].MaxHP, Enemies.towerEnemies[2].HP,true);
-            se3 += "   " + Enemies.towerEnemies[2].Name;
+            if (!Enemies.towerEnemies[2].IsAlive)
+                se3 += "   \u001b[31m" + Enemies.towerEnemies[2].Name+"\u001b[0m";
+            else
+            {
+                se3 += "   " + Enemies.towerEnemies[2].Name;
+            }
             if (Enemies.towerEnemies[2].IsBuffed)
                 enemyBuffsAndDebuffs3 +="\u001b[34m⚔\u001b[0m ";
             if (Enemies.towerEnemies[2].IsPoisonned)
@@ -630,7 +849,12 @@ public class Combat
         if (Enemies.towerEnemies.Count>3)
         {
             se4 = CalculateCubes(Enemies.towerEnemies[3].MaxHP, Enemies.towerEnemies[3].HP,true);
-            se4 += "   " + Enemies.towerEnemies[3].Name;
+            if (!Enemies.towerEnemies[3].IsAlive)
+                se4 += "   \u001b[31m" + Enemies.towerEnemies[3].Name+"\u001b[0m";
+            else
+            {
+                se4 += "   " + Enemies.towerEnemies[3].Name;
+            }
             if (Enemies.towerEnemies[3].IsBuffed)
                 enemyBuffsAndDebuffs4 +="\u001b[34m⚔\u001b[0m ";
             if (Enemies.towerEnemies[3].IsPoisonned)
@@ -691,7 +915,7 @@ public class Combat
             DisplayCharacterInfo(character);
         else
         {
-            DisplayEnemyInfo(Enemies.towerEnemies[Arrow-1]);
+            DisplayEnemyInfo(Enemies.towerEnemies[Arrow-1],0);
         }
         Console.WriteLine("|                                                                       |\n" +
                           "|\u001b[31m[<-]\u001b[0m                \u001b[34mBack(b)\u001b[0m" +
@@ -806,181 +1030,6 @@ public class Combat
                 enem.HP = 0;
             }
         }
-        Console.Clear();
-        isActive1 = "\u001b[0m";
-        isActive2 = "\u001b[0m";
-        isActive3 = "\u001b[0m";
-        arrowPointer = "\u001b[31m←\u001b[0m";
-
-        characterBuffsAndDebuffs1 = "  ";
-        characterBuffsAndDebuffs2 = "  ";
-        characterBuffsAndDebuffs3 = "  ";
-        characterBuffsAndDebuffs4 = "  ";
-        
-        sc1 =CalculateCubes(Dungeon.Team[0].MaxHP,Dungeon.Team[0].HP,false);
-        if (character == Dungeon.Team[0])
-        {
-            isActive1 = "\u001b[33m";
-            if (Dungeon.Team[0].IsBuffed)
-                characterBuffsAndDebuffs1 +="\u001b[34m⚔\u001b[0m ";
-            if (Dungeon.Team[0].IsPoisonned)
-                characterBuffsAndDebuffs1 += "\u001b[32m☠"+ "\u001b[0m ";
-            if (Dungeon.Team[0].IsStuned)
-                characterBuffsAndDebuffs1 += "\u001b[33m꩜"+ "\u001b[0m";
-
-        }
-        sc2="";
-        if (Dungeon.Team.Count>1)
-        {
-            sc2 = CalculateCubes(Dungeon.Team[1].MaxHP, Dungeon.Team[1].HP,false);
-            if (character == Dungeon.Team[1])
-                isActive2 = "\u001b[33m";
-            sc2 += "   " + isActive2 + Dungeon.Team[1].Name + "\u001b[0m";
-            if (Dungeon.Team[1].IsBuffed)
-                characterBuffsAndDebuffs2 +="\u001b[34m⚔\u001b[0m ";
-            if (Dungeon.Team[1].IsPoisonned)
-                characterBuffsAndDebuffs2 += "\u001b[32m☠"+ "\u001b[0m ";
-            if (Dungeon.Team[1].IsStuned)
-                characterBuffsAndDebuffs2 += "\u001b[33m꩜"+ "\u001b[0m";
-        }
-        sc3="";
-        if (Dungeon.Team.Count>2)
-        {
-            sc3 = CalculateCubes(Dungeon.Team[2].MaxHP, Dungeon.Team[2].HP,false);
-            if (character == Dungeon.Team[2])
-                isActive3 = "\u001b[33m";
-            sc3 += "   " + isActive3 + Dungeon.Team[2].Name + "\u001b[0m";
-            if (Dungeon.Team[2].IsBuffed)
-                characterBuffsAndDebuffs3 +="\u001b[34m⚔\u001b[0m ";
-            if (Dungeon.Team[2].IsPoisonned)
-                characterBuffsAndDebuffs3 += "\u001b[32m☠"+ "\u001b[0m ";
-            if (Dungeon.Team[2].IsStuned)
-                characterBuffsAndDebuffs3 += "\u001b[33m꩜"+ "\u001b[0m";
-        }
-        
-        characterHealthAndNames1 = sc1+"   "+isActive1+$"{Dungeon.Team[0].Name}\u001b[0m";
-        characterHealthAndNames2 = sc2+"\u001b[0m";
-        characterHealthAndNames3 = sc3+"\u001b[0m";
-        characterHealthAndNames1 = InsertsSpaces(characterHealthAndNames1,40);
-        characterHealthAndNames2 = InsertsSpaces(characterHealthAndNames2,40);
-        characterHealthAndNames3 = InsertsSpaces(characterHealthAndNames3,40);
-        characterHealthAndNames4 = InsertsSpaces("  ",40);
-
-        characterBuffsAndDebuffs1 = InsertsSpaces(characterBuffsAndDebuffs1, 40);
-        characterBuffsAndDebuffs2 = InsertsSpaces(characterBuffsAndDebuffs2, 40);
-        characterBuffsAndDebuffs3 = InsertsSpaces(characterBuffsAndDebuffs3, 40);
-        characterBuffsAndDebuffs4 = InsertsSpaces(characterBuffsAndDebuffs4, 40);
-
-        enemyBuffsAndDebuffs1 = "  ";
-        se1 =CalculateCubes(Enemies.towerEnemies[0].MaxHP,Enemies.towerEnemies[0].HP,true);
-        se1 += "   " + Enemies.towerEnemies[0].Name;
-        if (Enemies.towerEnemies[0].IsBuffed)
-            enemyBuffsAndDebuffs1 +="\u001b[34m⚔\u001b[0m ";
-        if (Enemies.towerEnemies[0].IsPoisonned)
-            enemyBuffsAndDebuffs1 += "\u001b[32m☠"+ "\u001b[0m ";
-        if (Enemies.towerEnemies[0].IsStuned)
-            enemyBuffsAndDebuffs1 += "\u001b[33m꩜"+ "\u001b[0m";
-        enemyBuffsAndDebuffs2 = "  ";
-        enemyBuffsAndDebuffs3 = "  ";
-        enemyBuffsAndDebuffs4 = "  ";
-        
-        se2="";
-        if (Enemies.towerEnemies.Count>1)
-        {
-            se2 = CalculateCubes(Enemies.towerEnemies[1].MaxHP, Enemies.towerEnemies[1].HP,true);
-            se2 += "   " + Enemies.towerEnemies[1].Name;
-            if (Enemies.towerEnemies[1].IsBuffed)
-                enemyBuffsAndDebuffs2 +="\u001b[34m⚔\u001b[0m ";
-            if (Enemies.towerEnemies[1].IsPoisonned)
-                enemyBuffsAndDebuffs2 += "\u001b[32m☠"+ "\u001b[0m ";
-            if (Enemies.towerEnemies[1].IsStuned)
-                enemyBuffsAndDebuffs2 += "\u001b[33m꩜"+ "\u001b[0m";
-            
-        }
-        se3="";
-        if (Enemies.towerEnemies.Count>2)
-        {
-            se3 = CalculateCubes(Enemies.towerEnemies[2].MaxHP, Enemies.towerEnemies[2].HP,true);
-            se3 += "   " + Enemies.towerEnemies[2].Name;
-            if (Enemies.towerEnemies[2].IsBuffed)
-                enemyBuffsAndDebuffs3 +="\u001b[34m⚔\u001b[0m ";
-            if (Enemies.towerEnemies[2].IsPoisonned)
-                enemyBuffsAndDebuffs3 += "\u001b[32m☠"+ "\u001b[0m ";
-            if (Enemies.towerEnemies[2].IsStuned)
-                enemyBuffsAndDebuffs3 += "\u001b[33m꩜"+ "\u001b[0m";
-        }
-        se4="";
-        if (Enemies.towerEnemies.Count>3)
-        {
-            se4 = CalculateCubes(Enemies.towerEnemies[3].MaxHP, Enemies.towerEnemies[3].HP,true);
-            se4 += "   " + Enemies.towerEnemies[3].Name;
-            if (Enemies.towerEnemies[3].IsBuffed)
-                enemyBuffsAndDebuffs4 +="\u001b[34m⚔\u001b[0m ";
-            if (Enemies.towerEnemies[3].IsPoisonned)
-                enemyBuffsAndDebuffs4 += "\u001b[32m☠"+ "\u001b[0m ";
-            if (Enemies.towerEnemies[3].IsStuned)
-                enemyBuffsAndDebuffs4 += "\u001b[33m꩜"+ "\u001b[0m";
-        }
-        
-        se1 = InsertsSpaces(se1,30);
-        se2 = InsertsSpaces(se2,30);
-        se3 = InsertsSpaces(se3,30);
-        se4 = InsertsSpaces(se4,30);
-        
-
-        enemyBuffsAndDebuffs1 = InsertsSpaces(enemyBuffsAndDebuffs1, 30);
-        enemyBuffsAndDebuffs2 = InsertsSpaces(enemyBuffsAndDebuffs2, 30);
-        enemyBuffsAndDebuffs3 = InsertsSpaces(enemyBuffsAndDebuffs3, 30);
-        enemyBuffsAndDebuffs4 = InsertsSpaces(enemyBuffsAndDebuffs4, 30);
-        
-        se1 +="|";
-        se2 +="|";
-        se3 +="|";
-        se4 +="|";
-        if (Arrow == 1)
-        {
-            se1 += arrowPointer;
-        }
-        else if (Arrow == 2)
-        {
-            se2 += arrowPointer;
-        }
-        else if (Arrow == 3)
-        {
-            se3 += arrowPointer;
-        }
-        else
-        {
-            se4 += arrowPointer;
-        }
-        
-        
-        Console.WriteLine("\n" +
-                          "                         \u001b[31mCombat\u001b[0m - \u001b[36mTower Level "+Dungeon.towerStageClear+"\u001b[0m\n");
-        Console.WriteLine("/-----------------------------------------------------------------------\\");
-        Console.WriteLine("| "+characterHealthAndNames1+se1);
-        Console.WriteLine("| "+characterBuffsAndDebuffs1+enemyBuffsAndDebuffs1+"|");
-        
-        Console.WriteLine("| "+characterHealthAndNames2+se2);
-        Console.WriteLine("| "+characterBuffsAndDebuffs2+enemyBuffsAndDebuffs2+"|");
-        
-        Console.WriteLine("| "+characterHealthAndNames3+se3);
-        Console.WriteLine("| "+characterBuffsAndDebuffs3+enemyBuffsAndDebuffs3+"|");
-        
-        Console.WriteLine("| "+characterHealthAndNames4+se4);
-        Console.WriteLine("| "+characterBuffsAndDebuffs4+enemyBuffsAndDebuffs4+"|");
-        
-        if (displayChars)
-            DisplayCharacterInfo(character);
-        else
-        {
-            DisplayEnemyInfo(Enemies.towerEnemies[Arrow-1]);
-        }
-        Console.WriteLine("|                                                                       |\n" +
-                          "|\u001b[31m[<-]\u001b[0m                \u001b[34mBack(b)\u001b[0m" +
-                          "                \u001b[36mStats(s)\u001b[0m                \u001b[31m[->]\u001b[0m|\n" +
-                          "|                                                                       |\n" +
-                          "\\-----------------------------------------------------------------------/\n");
         StartFight(characterCollection);
     }
 
@@ -1551,13 +1600,11 @@ public class Combat
                     }
                 }
             }
-
+            Console.ReadKey();
         }
-
-        Console.ReadKey();
     }
 
-    public static void DisplayEnemyInfo(Enemies enemies)
+    public static void DisplayEnemyInfo(Enemies enemies, int skillToUse)
     {
         Console.WriteLine("/-----------------------------------------------------------------------\\\n" +
                           "|                                                                       |\n" +
@@ -1605,12 +1652,14 @@ public class Combat
                 res += " ";
                 len += 1;
             }
-            Console.WriteLine(res + "|");
+
+            string temp = res + "|";
+            if (skillToUse!=0)
+                temp+="\u001b[31m←\u001b[0m";
+            Console.WriteLine(temp);
         }
-        
         Console.WriteLine("|                                                                       |");
         s = $"\u001b[36mUltimate\u001b[0m : {enemies.UltSkill.Description}";
-        
         for (int i = 1; i < s.Length; i += jj)
         {
             
@@ -1651,7 +1700,11 @@ public class Combat
                 res += " ";
                 len += 1;
             }
-            Console.WriteLine(res + "|");
+
+            string temp = res + "|";
+            if (skillToUse==0)
+                temp+="\u001b[31m←\u001b[0m";
+            Console.WriteLine(temp);
         }
     }
     public static void DisplayCharacterInfo(Character character)

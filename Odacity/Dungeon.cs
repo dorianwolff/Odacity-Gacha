@@ -71,7 +71,7 @@ public class Dungeon
     
     public static void DisplayHighScores(List<Character> characterCollection)
     {
-        string floor = ""+towerStageClear;
+        string floor = ""+(towerStageClear-1);
         if (floor.Length == 2)
             floor += " ";
         else if (floor.Length == 1)
@@ -82,7 +82,7 @@ public class Dungeon
                           "|                 \u001b[36mHighScores\u001b[0m                |\n" +
                           "|                                           |");
         
-        Console.WriteLine("|          Current floor clear : "+floor+"            |\n" +
+        Console.WriteLine("|            Current floor clear : "+floor+"      |\n" +
                           "|                                           |\n" +
                           "|                                           |\n" +
                           "\\-------------------------------------------/\n");

@@ -69,6 +69,11 @@ public class Account
     {
         account.SummoningCurrency = Menu.summoningCurrency;
         account.SummonableCharacters = Menu.summonableCharacters;
+        account.TowerStageClear = Dungeon.towerStageClear;
+        foreach (Character character in account.CharacterCollection)
+        {
+            character.HP = character.MaxHP;
+        }
         // Save the account data before the program exits
         SaveAccountData(filepath,account);
     }

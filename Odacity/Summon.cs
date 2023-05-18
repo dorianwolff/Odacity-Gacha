@@ -169,7 +169,10 @@ public class Summon
                 {
                     hasChar = true;
                     if (character.awakening<10) //here to put max awakening
+                    {
                         character.awakening += 1;
+                        ChangeAwakening(character);
+                    }
                 }
             }
 
@@ -212,6 +215,40 @@ public class Summon
         Console.ReadLine();
 
         DisplaySummonScreen(summoningCurrency, collection);
+    }
+
+    private static void ChangeAwakening(Character character)
+    {
+        if (character.awakening%3 ==0)
+        {
+            if (character.Skill1.BuffEffect != "")
+                character.Skill1.buffPercentage += 2;
+            else
+            {
+                character.Skill1.AttackMultiplier += 2;
+            }
+        }
+        else if (character.awakening%3 ==1)
+        {
+            if (character.Skill2.BuffEffect != "")
+                character.Skill2.buffPercentage += 2;
+            else
+            {
+                character.Skill2.AttackMultiplier += 2;
+            }
+        }
+        else
+        {
+            if (character.UltSkill.isSingleTarget)
+                character.UltSkill.isSingleTarget = false;
+            else if (character.UltSkill.BuffEffect != "")
+                character.UltSkill.buffPercentage += 6;
+            else
+            {
+                character.UltSkill.AttackMultiplier += 6;
+            }
+        }
+        
     }
 
     private static Character PerformSingleSummon()
