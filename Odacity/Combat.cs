@@ -58,6 +58,12 @@ public class Combat
                 dedEnemies = false;
         }
 
+        foreach (Character character in Dungeon.Team)
+        {
+            character.IsAlive = true;
+            character.HP = character.MaxHP;
+        }
+
         if (dedEnemies)
         {
             Victory(characterCollection);
@@ -185,11 +191,29 @@ public class Combat
         Character characterTargeted = Dungeon.Team[0];
         foreach (Character character in Dungeon.Team)
         {
-            if (character.IsAlive && character.HP < characterTargeted.HP)
-                characterTargeted = character;
+            if (character.HP <= 0)
+            {
+                character.IsAlive = false;
+                character.HP = 0;
+            }
+        }
+        foreach (Enemies enem in Enemies.towerEnemies)
+        {
+            if (enem.HP <= 0)
+            {
+                enem.IsAlive = false;
+                enem.HP = 0;
+            }
         }
         if (ADeadTeam())
             return;
+        foreach (Character character in Dungeon.Team)
+        {
+            if (character.IsAlive && character.HP < characterTargeted.HP)
+                characterTargeted = character;
+        }
+        if (enemy.Tag == "BOSS") //BOSSES CANNOT BE STUNNED
+            enemy.IsStuned = false;
         Console.Clear();
         Console.WriteLine();
         Console.WriteLine("\u001b[31mEnemy\u001b[0m turn");
@@ -350,6 +374,13 @@ public class Combat
                 enemyBuffsAndDebuffs4 += "\u001b[33m꩜"+ "\u001b[0m";
         }
         
+        if (se2.Length < 2) //BOSS UI
+        {
+            se2 += "  ";
+            se3 += "  ";
+            se4 += "  ";
+        }
+        
         se1 = InsertsSpaces(se1,30);
         se2 = InsertsSpaces(se2,30);
         se3 = InsertsSpaces(se3,30);
@@ -383,6 +414,11 @@ public class Combat
         Console.WriteLine("| "+characterBuffsAndDebuffs4+enemyBuffsAndDebuffs4+"|");
         
         DisplayEnemyInfo(enemy,enemy.UltSkill.Cooldown);
+        if (enemy.Tag == "BOSS")
+        {
+            Console.WriteLine("|                                                                       |\n" +
+                              "|                  \u001b[31mWARNING ! BOSSES CANNOT BE \u001b[32mSTUNNED\u001b[0m !\u001b[0m                 |");
+        }
         
         Console.WriteLine("|                                                                       |\n" +
                           "|                                                                       |\n" +
@@ -391,7 +427,7 @@ public class Combat
         
         if (enemy.IsPoisonned) //Check if poisonned
         {
-            Console.WriteLine("The enemy is poisoned. It loses "+enemy.HP/20+ "HP.");
+            Console.WriteLine("The \u001b[35menemy\u001b[0m is \u001b[32mpoisoned\u001b[0m. It loses \u001b[31m"+enemy.HP/20+ "\u001b[0m HP.");
             enemy.IsPoisonned = false;
             enemy.HP-=(enemy.HP/20);
         }
@@ -418,7 +454,7 @@ public class Combat
         accuracyLuck += enemy.buffedAccuracy;
         if (enemy.IsStuned) // Check if stunned
         {
-            Console.WriteLine("The enemy is stunned. It cannot attack until next turn.");
+            Console.WriteLine("The \u001b[35menemy\u001b[0m is \u001b[32mstunned\u001b[0m. It cannot attack until \u001b[36mnext turn\u001b[0m.");
             enemy.IsStuned = false;
         }
         else
@@ -862,6 +898,13 @@ public class Combat
             if (Enemies.towerEnemies[3].IsStuned)
                 enemyBuffsAndDebuffs4 += "\u001b[33m꩜"+ "\u001b[0m";
         }
+
+        if (se2.Length < 2) //BOSS UI
+        {
+            se2 += "  ";
+            se3 += "  ";
+            se4 += "  ";
+        }
         
         se1 = InsertsSpaces(se1,30);
         se2 = InsertsSpaces(se2,30);
@@ -974,7 +1017,9 @@ public class Combat
                 }
                 break;
             case ConsoleKey.DownArrow:
-                if (Arrow == 4)
+                if (Enemies.towerEnemies[0].Tag == "BOSS")
+                    Arrow = 1;
+                else if (Arrow == 4)
                     Arrow = 1;
                 else
                 {
@@ -1001,7 +1046,9 @@ public class Combat
                 DisplayCharacterTurn(character, characterCollection);
                 break;
             case ConsoleKey.UpArrow:
-                if (Arrow == 1)
+                if (Enemies.towerEnemies[0].Tag == "BOSS")
+                    Arrow = 1;
+                else if (Arrow == 1)
                     Arrow = 4;
                 else
                 {
@@ -1182,18 +1229,18 @@ public class Combat
         }
         if (character.IsStuned)
         {
-            Console.WriteLine(character.Name+" is \u001b[32mstunned\u001b[0m. It cannot attack until next turn.");
+            Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m is \u001b[32mstunned\u001b[0m. It cannot attack until \u001b[36mnext turn\u001b[0m.");
             character.IsStuned = false;
         } //Check Stuned
         if (character.IsPoisonned)
         {
-            Console.WriteLine(character.Name+" is \u001b[32mpoisoned\u001b[0m. It loses "+character.HP/20+ "HP.");
+            Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m is \u001b[32mpoisoned\u001b[0m. It loses \u001b[31m"+character.HP/20+ "\u001b[0m HP.");
             character.IsPoisonned = false;
             character.HP-=(character.HP/20);
         }
         if (dodgeLuck>accuracyLuck)
         {
-            Console.WriteLine("The enemy \u001b[31mdodged\u001b[0m "+character.Name+"'s attack!");
+            Console.WriteLine("\u001b[35m"+enemies.Name+"\u001b[0m has \u001b[31mdodged\u001b[0m \u001b[33m"+character.Name+"\u001b[0m's attack!");
             Console.ReadKey();
         }
         else if (!character.IsStuned)

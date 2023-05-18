@@ -26,6 +26,7 @@ public class Enemies
     public bool IsAlive { get; set; }
     public int TurnPriority { get; set; }
     public int Speed { get; set; }
+    public string Tag { get; set; }
     
     public static List<Enemies> towerEnemies = new List<Enemies>();
     
@@ -41,65 +42,101 @@ public class Enemies
 
     public static void InitializeTowerEnemies()
     {
-        Enemies enemy1 = new Enemies();
-        Enemies enemy2 = new Enemies();
-        Enemies enemy3 = new Enemies();
-        Enemies enemy4 = new Enemies();
+        towerEnemies = new List<Enemies>();
+        if (Dungeon.towerStageClear % 5 != 0)
+        { 
+            Enemies enemy1 = new Enemies();
+            Enemies enemy2 = new Enemies();
+            Enemies enemy3 = new Enemies();
+            Enemies enemy4 = new Enemies();
 
-        //Needs random name generation
-        enemy1.Name = "Cringe"; //ASSASSIN
-        enemy2.Name = "Gutz"; //WARRIOR
-        enemy3.Name = "Hodor"; //TANK
-        enemy4.Name = "Lyndis"; //DPS
+            //Needs random name generation
+            enemy1.Name = "Cringe"; //ASSASSIN
+            enemy2.Name = "Gutz"; //WARRIOR
+            enemy3.Name = "Hodor"; //TANK
+            enemy4.Name = "Lyndis"; //DPS
         
-        enemy1.Nickname = "Silent Fart";
-        enemy2.Nickname = "Bloody Berserker";
-        enemy3.Nickname = "Top Master";
-        enemy4.Nickname = "Elf";
+            enemy1.Nickname = "Silent Fart";
+            enemy2.Nickname = "Bloody Berserker";
+            enemy3.Nickname = "Top Master";
+            enemy4.Nickname = "Elf";
 
-        enemy1.Level = Dungeon.towerStageClear; //ASSASSIN
-        enemy2.Level = Dungeon.towerStageClear; //WARRIOR
-        enemy3.Level = Dungeon.towerStageClear; //TANK
-        enemy4.Level = Dungeon.towerStageClear; //DPS
+            enemy1.Tag = "ASSASSIN";
+            enemy2.Tag = "WARIIOR";
+            enemy3.Tag = "TANK";
+            enemy4.Tag = "DPS";
 
-        enemy1.Attack = 100 + Dungeon.towerStageClear;
-        enemy2.Attack = 80 + Dungeon.towerStageClear;
-        enemy3.Attack = 50 + Dungeon.towerStageClear;
-        enemy4.Attack = 120 + Dungeon.towerStageClear;
+            enemy1.Level = Dungeon.towerStageClear;
+            enemy2.Level = Dungeon.towerStageClear;
+            enemy3.Level = Dungeon.towerStageClear;
+            enemy4.Level = Dungeon.towerStageClear;
 
-        enemy1.Accuracy = 10*Dungeon.towerStageClear / 11 + 15;
-        enemy2.Accuracy = 10*Dungeon.towerStageClear / 14 + 15;
-        enemy3.Accuracy = 10*Dungeon.towerStageClear / 20 + 5;
-        enemy4.Accuracy = 10*Dungeon.towerStageClear / 13 + 20;
+            enemy1.Attack = 100 + 4*Dungeon.towerStageClear;
+            enemy2.Attack = 80 + 3*Dungeon.towerStageClear; 
+            enemy3.Attack = 50 + 2*Dungeon.towerStageClear;
+            enemy4.Attack = 120 + 6*Dungeon.towerStageClear;
+            
+            enemy1.Accuracy = 11*Dungeon.towerStageClear + 15; 
+            enemy2.Accuracy = 14*Dungeon.towerStageClear + 15; 
+            enemy3.Accuracy = 20*Dungeon.towerStageClear + 5;
+            enemy4.Accuracy = 13*Dungeon.towerStageClear + 20;
+            
+            enemy1.Dodge = 10*Dungeon.towerStageClear/ 14 + 15; 
+            enemy2.Dodge = 10*Dungeon.towerStageClear/ 11 + 12; 
+            enemy3.Dodge = 10*Dungeon.towerStageClear/ 20 + 10; 
+            enemy4.Dodge = 10*Dungeon.towerStageClear/ 13 + 5;
+            
+            enemy1.Speed = 11*Dungeon.towerStageClear + 130; 
+            enemy2.Speed = 16*Dungeon.towerStageClear + 90; 
+            enemy3.Speed = 22*Dungeon.towerStageClear + 50; 
+            enemy4.Speed = 22*Dungeon.towerStageClear + 60;
+            
+            enemy1.MaxHP = 150+Dungeon.towerStageClear*10; 
+            enemy2.MaxHP = 300+Dungeon.towerStageClear*20; 
+            enemy3.MaxHP = 400+Dungeon.towerStageClear*30; 
+            enemy4.MaxHP = 120+Dungeon.towerStageClear*6;
+            
+            enemy1.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("C"); 
+            enemy2.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("R"); 
+            enemy3.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("C"); 
+            enemy4.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("C");
+            
+            enemy1.UltSkill = GenerateCharacters.GenerateEnemyUltSkill("C"); 
+            enemy2.UltSkill = GenerateCharacters.GenerateEnemyUltSkill("C"); 
+            enemy3.UltSkill = GenerateCharacters.GenerateEnemyUltSkill("R"); 
+            enemy4.UltSkill = GenerateCharacters.GenerateEnemyUltSkill("C");
+            
+            towerEnemies.Add(enemy1); 
+            towerEnemies.Add(enemy2); 
+            towerEnemies.Add(enemy3); 
+            towerEnemies.Add(enemy4);
+        }
+        else
+        {
+            Enemies boss = new Enemies();
+            boss.Name = "Dreadnought";
+            boss.Nickname = "Ultimate Slayer";
+            boss.Tag = "BOSS";
+            
+            boss.Level = Dungeon.towerStageClear;
+            boss.Attack = 250 + 10*Dungeon.towerStageClear;
+            boss.Accuracy = Dungeon.towerStageClear + 20;
+            if (Dungeon.towerStageClear%10==0)
+            {
+                boss.Dodge = Dungeon.towerStageClear + 20;
+                boss.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("R");
+                boss.UltSkill = GenerateCharacters.GenerateEnemyUltSkill("E");
+            }
+            else
+            {
+                boss.Dodge = 0;
+                boss.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("E");
+                boss.UltSkill = GenerateCharacters.GenerateEnemyUltSkill("L");
+            }
 
-        enemy1.Dodge = 10*Dungeon.towerStageClear/ 14 + 15;
-        enemy2.Dodge = 10*Dungeon.towerStageClear/ 11 + 12;
-        enemy3.Dodge = 10*Dungeon.towerStageClear/ 20 + 10;
-        enemy4.Dodge = 10*Dungeon.towerStageClear/ 13 + 5;
-        
-        enemy1.Speed = 10*Dungeon.towerStageClear/ 11 + 130;
-        enemy2.Speed = 10*Dungeon.towerStageClear/ 16 + 90;
-        enemy3.Speed = 10*Dungeon.towerStageClear/ 22 + 50;
-        enemy4.Speed = 10*Dungeon.towerStageClear/ 22 + 60;
-        
-        enemy1.MaxHP = 150+Dungeon.towerStageClear*7;
-        enemy2.MaxHP = 300+Dungeon.towerStageClear*20;
-        enemy3.MaxHP = 400+Dungeon.towerStageClear*30;
-        enemy4.MaxHP = 120+Dungeon.towerStageClear*5;
-
-        enemy1.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("C");
-        enemy2.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("R");
-        enemy3.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("C");
-        enemy4.Skill1 = GenerateCharacters.GenerateEnemyNormalSkill("C");
-        
-        enemy1.UltSkill = GenerateCharacters.GenerateEnemyUltSkill("C");
-        enemy2.UltSkill = GenerateCharacters.GenerateEnemyUltSkill("C");
-        enemy3.UltSkill = GenerateCharacters.GenerateEnemyUltSkill("R");
-        enemy4.UltSkill = GenerateCharacters.GenerateEnemyUltSkill("C");
-
-        towerEnemies.Add(enemy1);
-        towerEnemies.Add(enemy2);
-        towerEnemies.Add(enemy3);
-        towerEnemies.Add(enemy4);
+            boss.Speed = Dungeon.towerStageClear*25 + 200;
+            boss.MaxHP = 800+Dungeon.towerStageClear*35;
+            towerEnemies.Add(boss);
+        }
     }
 }
