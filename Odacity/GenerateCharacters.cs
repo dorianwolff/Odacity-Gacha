@@ -172,7 +172,7 @@ public class GenerateCharacters
             ult.AttackMultiplier = dmg;
             ult.Description = ultname + " : A very powerful \u001b[35m"+single+"\u001b[0m skill " +
                               "-which does \u001b[31m" + dmg+"%\u001b[0m of atk as damage. " +
-                              "It inflicts \u001b[32m"+debuffT+"\u001b[0m on " + "\u001b[34m"+ allEnemies+"\u001b[0m.";
+                              "It inflicts \u001b[32m"+debuffT+"\u001b[0m on -" + "\u001b[34m"+ allEnemies+"\u001b[0m.";
             ult.BuffEffect = "";
             ult.DebuffEffect = debuffT;
         }
@@ -311,7 +311,7 @@ public class GenerateCharacters
             normal.AttackMultiplier = dmg;
             normal.Description = normalnames + " : An annoying \u001b[35m"+single+"\u001b[0m skill " +
                                  "-which does \u001b[31m" + dmg+"%\u001b[0m of atk as damage. " +
-                                 "It inflicts \u001b[32m"+debuffT+ "\u001b[0m on \u001b[34m"+allEnemies+"\u001b[0m.";
+                                 "It inflicts \u001b[32m"+debuffT+ "\u001b[0m on -\u001b[34m"+allEnemies+"\u001b[0m.";
             normal.BuffEffect = "";
             normal.DebuffEffect = debuffT;
         }
@@ -451,7 +451,7 @@ public class GenerateCharacters
             ult.AttackMultiplier = dmg;
             ult.Description = ultname + " : A very powerful \u001b[35m"+single+"\u001b[0m skill " +
                               "-which does \u001b[31m" + dmg+"%\u001b[0m of atk as damage. " +
-                              "It inflicts \u001b[32m"+debuffT+"\u001b[0m on " + "\u001b[34m"+ allEnemies+"\u001b[0m.";
+                              "It inflicts \u001b[32m"+debuffT+"\u001b[0m on -" + "\u001b[34m"+ allEnemies+"\u001b[0m.";
             ult.BuffEffect = "";
             ult.DebuffEffect = debuffT;
         }
@@ -590,7 +590,7 @@ public class GenerateCharacters
             normal.AttackMultiplier = dmg;
             normal.Description = normalnames + " : An annoying \u001b[35m"+single+"\u001b[0m skill " +
                                  "-which does \u001b[31m" + dmg+"%\u001b[0m of atk as damage. " +
-                                 "It inflicts \u001b[32m"+debuffT+ "\u001b[0m on \u001b[34m"+allEnemies+"\u001b[0m.";
+                                 "It inflicts \u001b[32m"+debuffT+ "\u001b[0m on -\u001b[34m"+allEnemies+"\u001b[0m.";
             normal.BuffEffect = "";
             normal.DebuffEffect = debuffT;
         }

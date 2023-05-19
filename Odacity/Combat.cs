@@ -5,7 +5,6 @@ public class Combat
     public static int TurnCount;
     public static int Arrow; // 1, 2, 3 or 4;
     public static bool displayChars;
-    public static int damageTaken;
     public static void TowerFight(List<Character> characterCollection)
     {
         foreach (Character character in Dungeon.Team)
@@ -24,6 +23,7 @@ public class Combat
             character.Skill2.CooldownLeft = 0;
             character.UltSkill.CooldownLeft = character.UltSkill.Cooldown;
             character.nbTurnsBuffed = 0;
+            character.tempDefeatedEnemiesExp = new List<int>();
         }
         
 
@@ -148,6 +148,10 @@ public class Combat
     {
         Console.WriteLine("All \u001b[31menemies\u001b[0m have been defeated!");
         Console.ReadKey();
+        foreach (Character character in Dungeon.Team)
+        {
+            LevelUp.levelUpCharacter(character);
+        }
         Console.Clear();
         Console.WriteLine("/-------------------------------------------\\\n" +
                           "|                                           |\n" +
@@ -424,13 +428,6 @@ public class Combat
                           "|                                                                       |\n" +
                           "|                                                                       |\n" +
                           "\\-----------------------------------------------------------------------/\n");
-        
-        if (enemy.IsPoisonned) //Check if poisonned
-        {
-            Console.WriteLine("The \u001b[35menemy\u001b[0m is \u001b[32mpoisoned\u001b[0m. It loses \u001b[31m"+enemy.HP/20+ "\u001b[0m HP.");
-            enemy.IsPoisonned = false;
-            enemy.HP-=(enemy.HP/20);
-        }
 
         if (enemy.IsBuffed)
         {
@@ -728,6 +725,19 @@ public class Combat
                 }
             }
         }
+        }
+        
+        if (enemy.IsPoisonned) //Check if poisonned
+        {
+            Console.WriteLine("The \u001b[35menemy\u001b[0m is \u001b[32mpoisoned\u001b[0m. It loses \u001b[31m"+enemy.HP/20+ "\u001b[0m HP.");
+            enemy.IsPoisonned = false;
+            enemy.HP-=(enemy.HP/20);
+            if (!enemy.IsAlive)
+            {
+                Random rda = new Random();
+                int expLuck = rda.Next(0, Dungeon.Team.Count);
+                Dungeon.Team[expLuck].tempDefeatedEnemiesExp.Add(enemy.Level);
+            }
         }
         
         Console.ReadKey();
@@ -1207,7 +1217,20 @@ public class Combat
 
     public static void AttackEnemy(Enemies enemies, Character character, int skill, List<Character> characterCollection)
     {
-        
+        List<bool> tempKilledEnemiesList = new List<bool>();
+        foreach (Enemies enemy in Enemies.towerEnemies)
+        {
+            if (enemy.IsAlive)
+            {
+                tempKilledEnemiesList.Add(true);
+            }
+            else
+            {
+                tempKilledEnemiesList.Add(false);
+            }
+        }
+
+        bool stun = character.IsStuned;
         Random rd = new Random();
         int dodgeLuck = rd.Next(1, 11);
         Random rdv = new Random();
@@ -1227,7 +1250,7 @@ public class Combat
                 character.buffedSpeed = character.Speed;
             }
         }
-        if (character.IsStuned)
+        if (stun)
         {
             Console.WriteLine("\u001b[33m"+character.Name+"\u001b[0m is \u001b[32mstunned\u001b[0m. It cannot attack until \u001b[36mnext turn\u001b[0m.");
             character.IsStuned = false;
@@ -1243,7 +1266,7 @@ public class Combat
             Console.WriteLine("\u001b[35m"+enemies.Name+"\u001b[0m has \u001b[31mdodged\u001b[0m \u001b[33m"+character.Name+"\u001b[0m's attack!");
             Console.ReadKey();
         }
-        else if (!character.IsStuned)
+        else if (!stun)
         {
             if (skill == 1) // Skill 1 
             {
@@ -1647,6 +1670,20 @@ public class Combat
                     }
                 }
             }
+
+            for (int i = 0; i < Enemies.towerEnemies.Count; i++)
+            {
+                if ((Enemies.towerEnemies[i].HP>0) != tempKilledEnemiesList[i])
+                {
+                    if (Enemies.towerEnemies[i].Tag=="BOSS")
+                        character.tempDefeatedEnemiesExp.Add(enemies.Level*5);
+                    else
+                    {
+                        character.tempDefeatedEnemiesExp.Add(enemies.Level);
+                    }
+                }
+            }
+            
             Console.ReadKey();
         }
     }

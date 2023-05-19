@@ -81,10 +81,10 @@ public class Dungeon
                           "|                                           |\n" +
                           "|                 \u001b[36mHighScores\u001b[0m                |\n" +
                           "|                                           |");
-        
-        Console.WriteLine("|            Current floor clear : "+floor+"      |\n" +
-                          "|                                           |\n" +
-                          "|                                           |\n" +
+
+        Console.WriteLine("|            Current floor clear : " + floor + "      |\n" +
+                          "|                                           |");
+        Console.WriteLine("|                                           |\n" + 
                           "\\-------------------------------------------/\n");
         Console.ReadKey();
         Enter(characterCollection);

@@ -111,7 +111,7 @@ public class Enemies
             towerEnemies.Add(enemy3); 
             towerEnemies.Add(enemy4);
         }
-        else
+        else // BOSS x4 exp drop
         {
             Enemies boss = new Enemies();
             boss.Name = "Dreadnought";

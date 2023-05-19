@@ -40,6 +40,8 @@ public class Character
     public bool IsPoisonned { get; set; }
     public int TurnPriority { get; set; }
     
+    public List<int> tempDefeatedEnemiesExp { get; set; }
+    
     public bool IsAlive { get; set; }
 
     //Abilities
