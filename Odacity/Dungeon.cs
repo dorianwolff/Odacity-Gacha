@@ -45,7 +45,7 @@ public class Dungeon
                 break;
             case ConsoleKey.V:
                 Console.Clear();
-                DisplayHighScores(characterCollection);
+                DisplayHighScores(characterCollection, false);
                 return;
             default:
                 // Invalid input
@@ -72,7 +72,7 @@ public class Dungeon
         Enter(characterCollection);
     } //TODO
     
-    public static void DisplayHighScores(List<Character> characterCollection)
+    public static void DisplayHighScores(List<Character> characterCollection, bool fromVictory)
     {
         string floor = ""+(towerStageClear-1);
         if (floor.Length == 2)
@@ -90,7 +90,12 @@ public class Dungeon
         Console.WriteLine("|                                           |\n" + 
                           "\\-------------------------------------------/\n");
         Console.ReadKey();
-        Enter(characterCollection);
+        if (fromVictory)
+            EnterTower(characterCollection);
+        else
+        {
+            Enter(characterCollection);
+        }
     }
 
     public static void EnterDungeon(List<Character> characterCollection)
@@ -490,7 +495,7 @@ public class Dungeon
         
     }
 
-    private static void EnterTower(List<Character> characterCollection)
+    public static void EnterTower(List<Character> characterCollection)
     {
         string towerStage = towerStageClear+"";
         if (towerStageClear < 10)

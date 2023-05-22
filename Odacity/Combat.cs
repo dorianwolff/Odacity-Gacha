@@ -169,7 +169,7 @@ public class Combat
         Dungeon.towerStageClear += 1;
         Console.ReadKey();
         Console.Clear();
-        Dungeon.DisplayHighScores(characterCollection);
+        Dungeon.DisplayHighScores(characterCollection, true);
     }
 
     public static void Defeat(List<Character> characterCollection)
@@ -189,7 +189,7 @@ public class Combat
                           "\\-------------------------------------------/\n");
         Console.ReadKey();
         Console.Clear();
-        Dungeon.EnterDungeon(characterCollection);
+        Dungeon.EnterTower(characterCollection);
     }
 
 
@@ -216,11 +216,13 @@ public class Combat
             return;
         foreach (Character character in Dungeon.Team)
         {
-            if (character.IsAlive && character.HP < characterTargeted.HP)
+            if (!characterTargeted.IsAlive || (character.IsAlive && character.HP < characterTargeted.HP))
                 characterTargeted = character;
         }
         if (enemy.Tag == "BOSS") //BOSSES CANNOT BE STUNNED
+        {
             enemy.IsStuned = false;
+        }
         Console.Clear();
         Console.WriteLine();
         Console.WriteLine("\u001b[31mEnemy\u001b[0m turn");
