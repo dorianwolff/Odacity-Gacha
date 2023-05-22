@@ -19,5 +19,3 @@ public class Skill
     
     public int CooldownLeft { get; set; }
 }
-
-
