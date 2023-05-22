@@ -151,17 +151,39 @@ public class Combat
     {
         Console.WriteLine("All \u001b[31menemies\u001b[0m have been defeated!");
         Console.ReadKey();
+        int coinsToBeEarned = 0;
+        foreach (Enemies enemy in Enemies.towerEnemies)
+        {
+            if (enemy.Tag!="Boss")
+                coinsToBeEarned += enemy.Level;
+            else
+            {
+                coinsToBeEarned += enemy.Level * 5;
+            }
+        }
         foreach (Character character in Dungeon.Team)
         {
             LevelUp.levelUpCharacter(character);
         }
+
+        string coinsEarned = coinsToBeEarned+"\u001b[33m ✇";
+        if (coinsToBeEarned<100)
+        {
+            coinsEarned += " ";
+        }
+        if (coinsToBeEarned<10)
+        {
+            coinsEarned += " ";
+        }
+
+        Menu.summoningCurrency += coinsToBeEarned;
         Console.Clear();
         Console.WriteLine("/-------------------------------------------\\\n" +
                           "|                                           |\n" +
                           "|                                           |\n" +
-                          "|                                           |\n" +
                           "|                   \u001b[33mVictory!\u001b[0m                |\n" +
                           "|                                           |\n" +
+                          "|                You won \u001b[31m"+coinsEarned+"\u001b[0m              |\n" +
                           "|                                           |\n" +
                           "|                                           |\n" +
                           "|                                           |\n" +

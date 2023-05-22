@@ -90,6 +90,7 @@ public class Dungeon
         Console.WriteLine("|                                           |\n" + 
                           "\\-------------------------------------------/\n");
         Console.ReadKey();
+        Console.Clear();
         if (fromVictory)
             EnterTower(characterCollection);
         else
