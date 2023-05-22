@@ -1,4 +1,6 @@
-﻿using Odacity;
+﻿using System;
+using System.Collections.Generic;
+using Odacity;
 
 LoadScreen loadScreen = new LoadScreen();
 Account account = new Account("",0,new List<Character>(),new List<Character>(),

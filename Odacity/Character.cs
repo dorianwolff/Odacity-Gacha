@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+
 namespace Odacity;
 
 // Character data class - It is kind of like the Player's
