@@ -8,15 +8,15 @@ public class LevelUp
     {
         Console.Clear();
         int tempLevel = character.Level;
-        string hp = character.MaxHP+" HP -> ";
+        string hp = character.MaxHP+$"\u001b[0m HP -> \u001b[33m";
         int hpA = 0;
-        string atk = character.Attack+" ATK -> ";
+        string atk = character.Attack+$"\u001b[0m ATK -> \u001b[33m";
         int atkA = 0;
-        string dodge = character.Dodge+" DODGE -> ";
+        string dodge = character.Dodge+$"\u001b[0m DODGE -> \u001b[33m";
         int dodgeA = 0;
-        string acc = character.Accuracy+" ACCURACY -> ";
+        string acc = character.Accuracy+$"\u001b[0m ACCURACY -> \u001b[33m";
         int accA = 0;
-        string speed = character.Speed+" SPEED -> ";
+        string speed = character.Speed+$"\u001b[0m SPEED -> \u001b[33m";
         int speedA = 0;
 
         for (int i = 0; i < character.tempDefeatedEnemiesExp.Count; i++)
@@ -56,11 +56,11 @@ public class LevelUp
         if (tempLevel != character.Level)
         {
             //Here can add colors
-            atk = $"|{character.Color}"+atk+atkA+character.Attack+"\u001b[0m ATK";
-            hp = $"|{character.Color}"+hp+hpA+character.HP+"\u001b[0m HP";
-            speed = $"|{character.Color}"+speed+speedA+character.Speed+"\u001b[0m Speed";
-            acc = $"|{character.Color}"+acc+accA+character.Accuracy+"\u001b[0m Accuracy";
-            dodge = $"|{character.Color}"+dodge+dodgeA+character.Dodge+"\u001b[0m Dodge";
+            atk = $"|{character.Color}"+atk+(atkA+character.Attack)+"\u001b[0m ATK";
+            hp = $"|{character.Color}"+hp+(hpA+character.HP)+"\u001b[0m HP";
+            speed = $"|{character.Color}"+speed+(speedA+character.Speed)+"\u001b[0m Speed";
+            acc = $"|{character.Color}"+acc+(accA+character.Accuracy)+"\u001b[0m Accuracy";
+            dodge = $"|{character.Color}"+dodge+(dodgeA+character.Dodge)+"\u001b[0m Dodge";
             Combat.InsertsSpaces(atk, 50);
             Combat.InsertsSpaces(dodge, 50);
             Combat.InsertsSpaces(hp, 50);
