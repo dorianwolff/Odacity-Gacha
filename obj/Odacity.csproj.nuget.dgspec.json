@@ -1,0 +1,67 @@
+{
+  "format": 1,
+  "restore": {
+    "/Users/le_ptit_cthulhu/Bureau_perso/Odacity/Odacity.csproj": {}
+  },
+  "projects": {
+    "/Users/le_ptit_cthulhu/Bureau_perso/Odacity/Odacity.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/Users/le_ptit_cthulhu/Bureau_perso/Odacity/Odacity.csproj",
+        "projectName": "Odacity",
+        "projectPath": "/Users/le_ptit_cthulhu/Bureau_perso/Odacity/Odacity.csproj",
+        "packagesPath": "/Users/le_ptit_cthulhu/.nuget/packages/",
+        "outputPath": "/Users/le_ptit_cthulhu/Bureau_perso/Odacity/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/Users/le_ptit_cthulhu/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net6.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net6.0": {
+            "targetAlias": "net6.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net6.0": {
+          "targetAlias": "net6.0",
+          "dependencies": {
+            "SkiaSharp.NativeAssets.Linux": {
+              "target": "Package",
+              "version": "[2.80.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/6.0.408/RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

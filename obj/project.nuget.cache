@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "FA/uoZX4BLa8C4P9ttqPoJ8r9lm4b7L8iYjcVkt9RMDynYl/0kXBPlhYswmfEoHxZr54PBqmwMSaZi540Mnp/Q==",
+  "success": true,
+  "projectFilePath": "/Users/le_ptit_cthulhu/Bureau_perso/Odacity/Odacity.csproj",
+  "expectedPackageFiles": [
+    "/Users/le_ptit_cthulhu/.nuget/packages/skiasharp/2.80.2/skiasharp.2.80.2.nupkg.sha512",
+    "/Users/le_ptit_cthulhu/.nuget/packages/skiasharp.nativeassets.linux/2.80.2/skiasharp.nativeassets.linux.2.80.2.nupkg.sha512",
+    "/Users/le_ptit_cthulhu/.nuget/packages/system.memory/4.5.3/system.memory.4.5.3.nupkg.sha512"
+  ],
+  "logs": []
+}
