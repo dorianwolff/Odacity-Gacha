@@ -2,14 +2,6 @@
 
 Odacity is a script-only gacha game made in 2023. You will be able to collect, play and enhance characters.
 
-Each character is unique and generated randomly from pieces (suffix/preffix for name, multiplyers and skills as well as images and stats) at the time of the creation of your account.
-
-In-game combat is turn-based and has the following view :
-
-![combat](Spare_Images/combat.png)
-
-You will be able to select, view and attack opposing characters as well as compose a strong lineup.
-
 
 ## In-depth information and game mechanics
 
@@ -67,5 +59,17 @@ Run the 'Odacity' executable using the following command :
 ```
 
 Congratulations, you are done!
+
+## Game feel and view
+
+Each character is unique and generated randomly from pieces (suffix/preffix for name, multipliers and skills (Q, W and Ultimate with a turn cooldown) as well as images and stats) at the time of the creation of your account.
+
+In-game combat is turn-based and has the following look :
+
+![combat](Spare_Images/combat.png)
+
+You will be able to select, view and attack opposing characters as well as compose a strong lineup.
+
+Collection page view :
 
 ![Collection](Spare_Images/Collection.png)
